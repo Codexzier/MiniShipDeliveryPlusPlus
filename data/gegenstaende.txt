@@ -1,0 +1,47 @@
+# ============================================================
+# Gegenstände (Shop und Inventar)
+# Der Objektname in [Klammern] ist die ID, die z.B. in level1.txt
+# unter "waren" benutzt wird.
+#   name         = Anzeigename (Tooltip)
+#   beschreibung = kurze Beschreibung (Tooltip)
+#   preis        = Kosten in Coins
+#   symbol       = Platzhalter-Symbol: beutel, haken, energy
+#   effekt       = keiner, ausdauer, leben, enterhaken, max_ausdauer
+#   wert         = Stärke des Effekts
+#   verbrauchbar = 1, wenn der Gegenstand beim Benutzen verschwindet
+#   einzigartig  = 1, wenn man ihn nur einmal besitzen kann
+#   stapel_max   = wie viele Stück in ein Inventarfeld passen
+# ============================================================
+
+[Einkaufsbeutel]
+name = Einkaufsbeutel
+beschreibung = Robuster Stoffbeutel für Lieferungen. Solange er im Inventar ist, steigt deine maximale Ausdauer um 25.
+preis = 10
+symbol = beutel
+effekt = max_ausdauer
+wert = 25
+verbrauchbar = 0
+einzigartig = 1
+stapel_max = 1
+
+[Enterhaken]
+name = Enterhaken
+beschreibung = Mit Q an einen Ankerpunkt werfen und über Abgründe und Gräben schwingen.
+preis = 30
+symbol = haken
+effekt = enterhaken
+wert = 0
+verbrauchbar = 0
+einzigartig = 1
+stapel_max = 1
+
+[Energy_Dose]
+name = Dose Energy
+beschreibung = Prickelnde Energie aus der Dose. Füllt 60 Ausdauer auf.
+preis = 5
+symbol = energy
+effekt = ausdauer
+wert = 60
+verbrauchbar = 1
+einzigartig = 0
+stapel_max = 5

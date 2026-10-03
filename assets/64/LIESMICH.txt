@@ -1,0 +1,9 @@
+Eigene Sprites fuer die Kachelgroesse 64x64 Pixel hier ablegen.
+
+Das Spiel sucht beim Start in diesem Ordner nach BMP-Dateien mit den
+Namen der Platzhalter (z.B. spieler.bmp, muenze.bmp, shop_Shop_1.bmp).
+Ist eine Datei vorhanden, wird sie statt des Platzhalters verwendet.
+
+Vorlagen mit dem richtigen Format erzeugt das Spiel automatisch im
+Ordner assets_dummies/64/ (siehe data/spiel.txt -> dummies_exportieren).
+Magenta (Rot 255, Gruen 0, Blau 255) gilt als durchsichtig.

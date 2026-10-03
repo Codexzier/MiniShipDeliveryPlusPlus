@@ -1,0 +1,39 @@
+# ============================================================
+# Mini Ship Delivery - allgemeine Einstellungen
+# Aufbau: [Objektname]  und darunter  eigenschaft = wert
+# Zeilen mit # sind Kommentare. Kommazahlen mit Punkt oder Komma.
+# ============================================================
+
+[Fenster]
+# Text in der Titelleiste des Fensters
+titel = Mini Ship Delivery
+# Fenstergröße in Pixel (das Bild wird in Software darauf skaliert)
+breite = 1280
+hoehe = 720
+# 1 = Vollbild, 0 = Fenster
+vollbild = 0
+# Höchstens so viele Bilder pro Sekunde (schont die CPU, z.B. auf dem Raspberry Pi)
+max_fps = 60
+
+[Grafik]
+# Größe eines Sprites bzw. einer Kachel in Pixel: 128 (Standard), 64 oder 32
+# Kleinere Werte sind schneller (gut für den Raspberry Pi).
+kachel_groesse = 128
+# Wie viele Kacheln nebeneinander sichtbar sind
+sicht_breite_kacheln = 10
+# Größe der Oberfläche (Menüleiste, Inventar, Schrift): 0 = automatisch
+ui_skalierung = 0
+# 1 = Platzhalter-Grafiken als BMP-Vorlagen in assets_dummies/ speichern
+dummies_exportieren = 1
+
+[Spiel]
+# Datei der ersten Karte im Ordner data/
+start_level = level1.txt
+
+[Steuerung]
+# Tastennamen wie bei SDL (z.B. A, D, Space, E, Q, Left, Right, Up)
+links = A
+rechts = D
+springen = Space
+interagieren = E
+enterhaken = Q
