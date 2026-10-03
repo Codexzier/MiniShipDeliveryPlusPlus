@@ -1,0 +1,50 @@
+# ============================================================
+# Eigenschaften der Spielfigur
+# Alle Längen in Kacheln (1 Kachel = 1 Sprite-Breite), Zeiten in Sekunden
+# ============================================================
+
+[Spieler]
+name = Paketbote Pit
+# Größe der Kollisionsbox
+breite = 0.40
+hoehe = 0.86
+# Höhe der Hände über den Füßen, wenn die Figur am Seil hängt
+hand_hoehe = 0.93
+# Laufen (Kacheln pro Sekunde) und Beschleunigung
+lauf_geschwindigkeit = 3.2
+beschleunigung_boden = 30
+beschleunigung_luft = 12
+# Springen und Fallen
+sprung_geschwindigkeit = 8.6
+schwerkraft = 22
+max_fallgeschwindigkeit = 14
+# Lebensleiste
+leben_max = 100
+# Ausdauer: Springen und Enterhaken kosten Ausdauer, am Boden erholt sie sich
+ausdauer_max = 100
+ausdauer_erholung = 14
+sprung_ausdauer = 10
+# Coins zu Beginn eines neuen Spiels
+start_coins = 40
+# Schutzzeit nach Schaden (Figur blinkt)
+unverwundbar_nach_schaden = 1.5
+# Wartezeit nach einem Sturz in einen Graben
+wiedererscheinen_nach = 0.9
+
+[Enterhaken_Physik]
+# Maximale Entfernung zu einem Ankerpunkt
+reichweite = 4.6
+# Seillänge, auf die sich die Figur nach dem Greifen hochzieht
+seil_laenge = 2.5
+# Wie schnell das Seil eingezogen wird
+einzug_geschwindigkeit = 4.0
+# Ausdauer pro Wurf
+ausdauer_kosten = 15
+# Dämpfung des Pendels (größer = schneller ruhig)
+pendel_daempfung = 0.15
+# Schwung durch A/D während des Schwingens (wirkt nur in Bewegungsrichtung)
+schwung_kraft = 4.0
+# Verstärkung der Geschwindigkeit beim Loslassen
+abwurf_verstaerkung = 1.25
+# Zusätzlicher Schwung nach oben beim Loslassen
+abwurf_hoch = 2.0

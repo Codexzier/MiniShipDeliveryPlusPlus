@@ -1,0 +1,8 @@
+# Build-Verzeichnisse (CLion legt cmake-build-* an)
+build/
+cmake-build-*/
+.idea/
+# Zur Laufzeit erzeugte Dateien
+speicher/
+assets_dummies/
+screenshots/
