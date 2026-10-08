@@ -1,26 +1,380 @@
-# Testversion
-[haus_test]
+# ============================================================
+# Modelle der Spielwelt (3D-Modelle aus den Kenney-Paketen im Ordner assets/)
+#
+# [name]           Name, unter dem das Spiel das Modell benutzt
+# datei          = OBJ-Datei relativ zu assets/
+# skalierung     = Faktor, damit 1 Einheit = 1 Kachel entspricht
+# vorne          = Richtung (Grad), in die die Vorderseite des Modells zeigt
+#                  (0 = +x/Südost, 90 = +y/Südwest, 180 = Nordwest, 270 = Nordost)
+# versatz        = x, y, z  Verschiebung nach dem Skalieren (in Kacheln, y = Höhe)
+# toenung        = r, g, b  Einfärbung aller Farben
+# farbe_<mat>    = r, g, b  Ersetzt die Farbe eines Materials aus der MTL-Datei
+# gruppen        = nur diese OBJ-Gruppen verwenden
+# ohne_gruppen   = diese OBJ-Gruppen weglassen
+# teil_N         = modell | x, y, z | drehung (Grad oder x,y,z) | skalierung
+# typ = haus     = Haus aus Fantasy-Town-Bauteilen (haus_groesse 1/2, stockwerke, wand stein/holz, dach walm/giebel)
+# typ = seeschlange = prozedurales Seeungeheuer
+# ============================================================
+
+# ---------------- Bewuchs und Landschaft ----------------
+[palme]
+datei = Pirate Kit/Models/OBJ format/palm_long.obj
+skalierung = 0.15
+
+[palme_kurz]
+datei = Pirate Kit/Models/OBJ format/palm_short.obj
+skalierung = 0.14
+
+[baum]
+datei = Nature Kit/Models/OBJ format/tree_default.obj
+skalierung = 0.17
+
+[baum_eiche]
+datei = Nature Kit/Models/OBJ format/tree_oak.obj
+skalierung = 0.2
+versatz = -0.6, 0, 0.7
+
+[baum_tanne]
+datei = Nature Kit/Models/OBJ format/tree_pine_tall.obj
+skalierung = 0.15
+
+[baum_rund]
+datei = Fantasy Town Kit/Models/OBJ format/treeHighRound.obj
+skalierung = 1.2
+
+[baumstumpf]
+datei = Nature Kit/Models/OBJ format/treeStump.obj
+skalierung = 0.2
+
+[baum_tot]
+datei = Graveyard Kit/Models/OBJ format/pine.obj
+skalierung = 1.3
+toenung = 150, 150, 150
+
+[baum_tot_krumm]
+datei = Graveyard Kit/Models/OBJ format/pineCrooked.obj
+skalierung = 1.3
+toenung = 140, 140, 150
+
+[grabstein]
+datei = Graveyard Kit/Models/OBJ format/gravestoneRound.obj
+skalierung = 1.4
+
+[grabstein_kreuz]
+datei = Graveyard Kit/Models/OBJ format/gravestoneCross.obj
+skalierung = 1.2
+
+[busch]
+datei = Nature Kit/Models/OBJ format/plant_bush.obj
+skalierung = 0.17
+
+[blumen]
+datei = Nature Kit/Models/OBJ format/flower_red2.obj
+skalierung = 0.2
+
+[stein]
+datei = Nature Kit/Models/OBJ format/rock_small1.obj
+skalierung = 0.2
+
+[felsen_wasser]
+datei = Pirate Kit/Models/OBJ format/formation_rock.obj
+skalierung = 0.11
+versatz = 0.58, -0.25, -0.58
+
+[felsen_wasser_gross]
+datei = Pirate Kit/Models/OBJ format/formationLarge_rock.obj
+skalierung = 0.1
+versatz = 0.68, -0.25, -0.47
+
+[laterne]
+datei = Fantasy Town Kit/Models/OBJ format/lantern.obj
+skalierung = 1.3
+
+[steg_pfosten]
+datei = Fantasy Town Kit/Models/OBJ format/pillarWood.obj
+skalierung = 1.0
+versatz = 0, -0.3, 0
+
+[boje]
+datei = Racing Kit/Models/OBJ format/pylon.obj
+skalierung = 4.5
+farbe_pylon = 230, 60, 50
+
+# ---------------- Gebäude ----------------
+[gebaeude_kontor]
 typ = haus
 haus_groesse = 2
 stockwerke = 2
 wand = stein
 skalierung = 1.5
-farbe_roof = 190, 70, 55
-farbe_roofLight = 215, 90, 70
+vorne = 90
+farbe_roof = 185, 70, 55
+farbe_roofLight = 210, 90, 70
+teil_1 = fahne_rot | -0.95, 1.2, 1.02 | 270 | 1
 
-[haus_holz]
+[gebaeude_museum]
 typ = haus
-haus_groesse = 1
+haus_groesse = 2
+stockwerke = 2
+wand = stein
+skalierung = 1.5
+vorne = 90
+farbe_stone = 232, 226, 212
+farbe_roof = 70, 85, 120
+farbe_roofLight = 90, 105, 145
+teil_1 = saeule | 0.3, 0, 1.15 | 0 | 1
+teil_2 = saeule | 0.9, 0, 1.15 | 0 | 1
+
+[gebaeude_werft]
+typ = haus
+haus_groesse = 2
 stockwerke = 1
 wand = holz
 skalierung = 1.5
+vorne = 90
+farbe_roof = 120, 85, 60
+farbe_roofLight = 140, 100, 70
+teil_1 = holzstapel | 0.9, 0, -1.4 | 90 | 1
 
-[boot]
-datei = Pirate Kit/Models/OBJ format/boat_large.obj
+[gebaeude_taverne]
+typ = haus
+haus_groesse = 2
+stockwerke = 2
+wand = holz
+skalierung = 1.5
+vorne = 90
+farbe_roof = 80, 130, 70
+farbe_roofLight = 95, 150, 85
+teil_1 = fahne_gruen | -0.95, 1.2, 1.02 | 270 | 1
+
+[gebaeude_laden]
+typ = haus
+haus_groesse = 2
+stockwerke = 1
+wand = stein
+skalierung = 1.5
+vorne = 90
+farbe_stone = 230, 205, 160
+farbe_roof = 200, 120, 50
+farbe_roofLight = 225, 140, 60
+
+[gebaeude_tischler]
+typ = haus
+haus_groesse = 2
+stockwerke = 1
+wand = holz
+skalierung = 1.5
+vorne = 90
+farbe_roof = 150, 70, 50
+farbe_roofLight = 170, 85, 60
+teil_1 = holzstapel | -1.4, 0, 0.4 | 0 | 1
+
+[gebaeude_uhrmacher]
+typ = haus
+haus_groesse = 2
+stockwerke = 2
+wand = stein
+skalierung = 1.5
+vorne = 90
+farbe_stone = 200, 215, 230
+farbe_roof = 110, 70, 130
+farbe_roofLight = 130, 90, 150
+
+[gebaeude_kartenhersteller]
+typ = haus
+haus_groesse = 2
+stockwerke = 2
+wand = stein
+skalierung = 1.5
+vorne = 90
+farbe_stone = 225, 215, 190
+farbe_roof = 60, 110, 140
+farbe_roofLight = 80, 130, 160
+
+[fahne_rot]
+datei = Fantasy Town Kit/Models/OBJ format/bannerRed.obj
+
+[fahne_gruen]
+datei = Fantasy Town Kit/Models/OBJ format/bannerGreen.obj
+
+[saeule]
+datei = Fantasy Town Kit/Models/OBJ format/pillarStone.obj
+
+[holzstapel]
+datei = Nature Kit/Models/OBJ format/logs_stack.obj
 skalierung = 0.12
+
+[marktstand_gruen]
+datei = Fantasy Town Kit/Models/OBJ format/stallGreen.obj
+skalierung = 1.3
+vorne = 90
+
+[marktstand_rot]
+datei = Fantasy Town Kit/Models/OBJ format/stallRed.obj
+skalierung = 1.3
+vorne = 90
+
+# ---------------- Schiffe ----------------
+[schiff_kutter]
+datei = Pirate Kit/Models/OBJ format/ship_light.obj
+ohne_gruppen = sail_back, sail_middle, cannon_left, cannon_right, cannon_front
+skalierung = 0.032
 vorne = 270
 
-[brigg]
+[schiff_schaluppe]
 datei = Pirate Kit/Models/OBJ format/ship_light.obj
+ohne_gruppen = sail_back, cannon_left
+skalierung = 0.04
+vorne = 270
+
+[schiff_brigg]
+datei = Pirate Kit/Models/OBJ format/ship_light.obj
+skalierung = 0.05
+vorne = 270
+
+[schiff_fregatte]
+datei = Pirate Kit/Models/OBJ format/ship_dark.obj
 skalierung = 0.06
 vorne = 270
+farbe__defaultMat = 235, 230, 215
+
+[schiff_dampfer]
+datei = Pirate Kit/Models/OBJ format/boat_large.obj
+skalierung = 0.17
+vorne = 270
+teil_1 = schornstein | 0, 1.5, 1 | 0 | 5
+
+[schiff_klipper]
+datei = Pirate Kit/Models/OBJ format/ship_light.obj
+ohne_gruppen = sail_middle
+skalierung = 0.05
+vorne = 270
+teil_1 = schornstein | 0, 15, 4 | 0 | 14
+
+[schiff_piraten]
+datei = Pirate Kit/Models/OBJ format/ship_dark.obj
+skalierung = 0.045
+vorne = 270
+farbe__defaultMat = 45, 42, 48
+toenung = 200, 190, 190
+
+[schornstein]
+datei = Fantasy Town Kit/Models/OBJ format/chimney.obj
+versatz = -0.3, 0, 0
+toenung = 90, 90, 95
+
+[kanonenkugel]
+datei = Pirate Kit/Models/OBJ format/cannonBall.obj
+skalierung = 0.12
+
+# ---------------- Gefahren ----------------
+[seeschlange]
+typ = seeschlange
+skalierung = 1.3
+vorne = 180
+
+# ---------------- Waren (Symbole) ----------------
+[ware_holz]
+datei = Nature Kit/Models/OBJ format/logs_stack.obj
+
+[ware_naegel]
+datei = Furniture Kit/Models/OBJ format/cardboardBoxClosed.obj
+toenung = 170, 170, 180
+
+[ware_werkzeug]
+datei = Graveyard Kit/Models/OBJ format/shovel.obj
+
+[ware_bronzeplatten]
+datei = Food Kit/Models/OBJ format/plate.obj
+toenung = 205, 140, 70
+
+[ware_papier]
+datei = Furniture Kit/Models/OBJ format/books.obj
+
+[ware_tinte]
+datei = Food Kit/Models/OBJ format/bottleOil.obj
+toenung = 90, 90, 210
+
+[ware_backsteine]
+datei = Graveyard Kit/Models/OBJ format/brickWall.obj
+
+[ware_tische]
+datei = Furniture Kit/Models/OBJ format/table.obj
+
+[ware_stuehle]
+datei = Furniture Kit/Models/OBJ format/chair.obj
+
+[ware_uhren]
+teil_1 = uhr_scheibe | 0, 0.45, 0 | 90, 0, 0 | 1
+teil_2 = uhr_zeiger | 0, 0.47, -0.1 | 0, 0, 30 | 1
+
+[uhr_scheibe]
+datei = Food Kit/Models/OBJ format/plate.obj
+toenung = 240, 200, 90
+
+[uhr_zeiger]
+datei = Food Kit/Models/OBJ format/utensilKnife.obj
+toenung = 60, 50, 50
+
+[ware_seekarten]
+datei = Furniture Kit/Models/OBJ format/rugRectangle.obj
+toenung = 240, 225, 180
+
+[ware_karotten]
+datei = Food Kit/Models/OBJ format/carrot.obj
+
+[ware_tomaten]
+datei = Food Kit/Models/OBJ format/tomato.obj
+
+[ware_kohl]
+datei = Food Kit/Models/OBJ format/cabbage.obj
+
+[ware_kuerbis]
+datei = Food Kit/Models/OBJ format/pumpkin.obj
+
+[ware_aepfel]
+datei = Food Kit/Models/OBJ format/apple.obj
+
+[ware_bananen]
+datei = Food Kit/Models/OBJ format/banana.obj
+
+[ware_trauben]
+datei = Food Kit/Models/OBJ format/grapes.obj
+
+[ware_kokosnuesse]
+datei = Food Kit/Models/OBJ format/coconut.obj
+
+[ware_fisch]
+datei = Food Kit/Models/OBJ format/fish.obj
+
+[ware_rum]
+datei = Food Kit/Models/OBJ format/barrel.obj
+
+# ---------------- Artefakte (schwimmen im Wasser) ----------------
+[artefakt_flasche]
+datei = Pirate Kit/Models/OBJ format/bottle.obj
+skalierung = 0.1
+
+[artefakt_teller]
+datei = Graveyard Kit/Models/OBJ format/detailPlate.obj
+skalierung = 2.5
+
+[artefakt_kelch]
+datei = Graveyard Kit/Models/OBJ format/detailChalice.obj
+skalierung = 3.0
+
+[artefakt_urne]
+datei = Graveyard Kit/Models/OBJ format/urn.obj
+skalierung = 2.0
+
+[artefakt_truhe]
+datei = Pirate Kit/Models/OBJ format/chest.obj
+skalierung = 0.12
+
+[artefakt_statue]
+datei = Nature Kit/Models/OBJ format/stone_statue.obj
+skalierung = 0.09
+
+[artefakt_obelisk]
+datei = Nature Kit/Models/OBJ format/stone_obelisk.obj
+skalierung = 0.09

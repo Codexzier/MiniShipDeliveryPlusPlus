@@ -21,6 +21,7 @@ struct Triangle {                                    // Beginn der Struktur
     int v[3] = {0, 0, 0};                            // Indizes in Mesh::positions
     int uv[3] = {-1, -1, -1};                        // Indizes in Mesh::uvs (-1 = keine)
     int material = 0;                                // Index in Mesh::materials
+    int group = 0;                                   // Index in Mesh::groups (OBJ-Gruppe "g")
 }; // Ende der Struktur Triangle
 
 // Ein komplettes 3D-Modell
@@ -29,6 +30,7 @@ struct Mesh {                                                            // Begi
     std::vector<float> uvs;                                              // Texturkoordinaten paarweise (u, v)
     std::vector<Triangle> triangles;                                     // Dreiecke
     std::vector<Material> materials;                                     // Materialien
+    std::vector<std::string> groups;                                     // Gruppennamen aus der OBJ-Datei
 
     bool empty() const { return triangles.empty(); }                     // Hat das Modell keine Dreiecke?
     void bounds(Vec3& minOut, Vec3& maxOut) const;                       // Umgebender Quader

@@ -1,6 +1,7 @@
 // ModelLibrary.cpp - Modelle laden, zusammensetzen, Häuser bauen und Sprites zwischenspeichern
 #include "ModelLibrary.h" // Eigene Deklarationen
 
+#include <algorithm> // std::find
 #include <cmath>    // std::fmod, std::round
 #include <cstdio>   // std::snprintf
 #include <iostream> // std::cout für Hinweise
@@ -54,6 +55,8 @@ bool ModelLibrary::load(const std::string& modelFile, const std::string& figureF
         d.offset = parseVec(file.getString(name, "versatz", "0,0,0"));    // Verschiebung
         d.tint = parseColor(file.getString(name, "toenung", "255,255,255")); // Einfärbung
         d.type = file.getString(name, "typ", "");                         // Sonderart
+        d.onlyGroups = file.getList(name, "gruppen");                     // Nur bestimmte Gruppen
+        d.skipGroups = file.getList(name, "ohne_gruppen");                // Gruppen weglassen
         d.houseSize = clampValue(file.getInt(name, "haus_groesse", 2), 1, 2); // Hausgröße
         d.floors = clampValue(file.getInt(name, "stockwerke", 1), 1, 3);  // Stockwerke
         d.wallStyle = file.getString(name, "wand", "stein");              // Wandart
@@ -62,9 +65,13 @@ bool ModelLibrary::load(const std::string& modelFile, const std::string& figureF
             std::string part = file.getString(name, "teil_" + std::to_string(i), ""); // Teil lesen
             if (!part.empty()) d.parts.push_back(part);                   // Speichern
         }                                                                 // Ende der Teileschleife
-        for (const char* material : {"roof", "roofLight", "stone", "wood", "woodDark", "metal", "dark", "textile", "white"}) { // Bekannte Materialnamen
-            std::string c = file.getString(name, std::string("farbe_") + material, ""); // Ersatzfarbe lesen
-            if (!c.empty()) d.recolor[material] = parseColor(c);          // Merken
+        for (const std::string& key : file.keys(name)) {                  // Alle Eigenschaften des Modells
+            if (key.rfind("farbe_", 0) != 0) continue;                    // Nur "farbe_<material>"
+            std::string material = key.substr(6);                         // Materialname
+            for (const std::string& orig : {std::string("roofLight"), std::string("woodDark"), std::string("_defaultMat")}) { // Gemischte Schreibweisen
+                if (PropertyFile::toLower(orig) == material) material = orig; // Originalschreibweise wiederherstellen
+            }                                                             // Ende der Schleife
+            d.recolor[material] = parseColor(file.getString(name, key, "255,255,255")); // Ersatzfarbe merken
         }                                                                 // Ende der Materialschleife
         m_defs[name] = d;                                                 // Speichern
     }                                                                     // Ende der Modellschleife
@@ -151,6 +158,64 @@ void ModelLibrary::buildHouse(const Def& def, Mesh& out) {               // Begi
     }                                                                     // Ende der Unterscheidung
 } // Ende von buildHouse
 
+// Erzeugt ein Seeungeheuer: mehrere Rückenbögen (Röhren) und ein Kopf mit leuchtenden Augen
+void ModelLibrary::buildSerpent(Mesh& out) {                             // Beginn von buildSerpent
+    out.materials.push_back(Material{"koerper", rgba(46, 112, 78), nullptr}); // Material 0: grüner Körper
+    out.materials.push_back(Material{"bauch", rgba(150, 190, 120), nullptr}); // Material 1: heller Bauch
+    out.materials.push_back(Material{"auge", rgba(255, 225, 60), nullptr});   // Material 2: gelbe Augen
+    auto tube = [&](const std::vector<Vec3>& centers, float radius, int material) { // Hilfsfunktion: Röhre entlang einer Linie
+        const int around = 8;                                             // Punkte je Ring
+        int base = static_cast<int>(out.positions.size());                // Erster neuer Punktindex
+        for (std::size_t i = 0; i < centers.size(); ++i) {                // Alle Ringe
+            Vec3 t = centers[std::min(i + 1, centers.size() - 1)] - centers[i > 0 ? i - 1 : 0]; // Richtung der Linie
+            t = normalize(t);                                             // Normieren
+            Vec3 n1(0, 0, 1);                                             // Erste Querachse (seitlich)
+            Vec3 n2 = normalize(cross(t, n1));                            // Zweite Querachse
+            float taper = 1.0f - 0.25f * std::fabs(static_cast<float>(i) / static_cast<float>(centers.size() - 1) * 2.0f - 1.0f); // Enden etwas dünner
+            for (int k = 0; k < around; ++k) {                            // Punkte im Ring
+                float a = static_cast<float>(k) / around * 6.2831853f;    // Winkel
+                out.positions.push_back(centers[i] + (n2 * std::cos(a) + n1 * std::sin(a)) * (radius * taper)); // Ringpunkt
+            }                                                             // Ende des Rings
+        }                                                                 // Ende der Ringe
+        for (std::size_t i = 0; i + 1 < centers.size(); ++i) {            // Flächen zwischen den Ringen
+            for (int k = 0; k < around; ++k) {                            // Alle Segmente
+                int a0 = base + static_cast<int>(i) * around + k;         // Punkt Ring i
+                int a1 = base + static_cast<int>(i) * around + (k + 1) % around; // Nachbar Ring i
+                int b0 = a0 + around, b1 = a1 + around;                   // Punkte Ring i+1
+                int mat = (k == around / 2 || k == around / 2 - 1) ? 1 : material; // Unterseite heller
+                Triangle t1; t1.v[0] = a0; t1.v[1] = b0; t1.v[2] = b1; t1.material = mat; out.triangles.push_back(t1); // Dreieck 1
+                Triangle t2; t2.v[0] = a0; t2.v[1] = b1; t2.v[2] = a1; t2.material = mat; out.triangles.push_back(t2); // Dreieck 2
+            }                                                             // Ende der Segmente
+        }                                                                 // Ende der Flächen
+    };                                                                    // Ende der Hilfsfunktion
+    for (int h = 0; h < 3; ++h) {                                         // Drei Rückenbögen
+        std::vector<Vec3> arc;                                            // Mittellinie des Bogens
+        float cx = 0.6f + static_cast<float>(h) * 1.15f;                  // Mitte des Bogens
+        float r = 0.5f - 0.08f * static_cast<float>(h);                   // Bogen wird nach hinten kleiner
+        for (int i = 0; i <= 10; ++i) {                                   // Punkte des Halbkreises
+            float a = 3.14159265f * static_cast<float>(i) / 10.0f;        // Winkel 0..Pi
+            arc.push_back(Vec3(cx - r * std::cos(a), r * std::sin(a) - 0.1f, 0)); // Punkt
+        }                                                                 // Ende des Halbkreises
+        tube(arc, 0.2f - 0.03f * static_cast<float>(h), 0);               // Röhre erzeugen
+    }                                                                     // Ende der Bögen
+    std::vector<Vec3> neck;                                               // Hals mit Kopf
+    for (int i = 0; i <= 10; ++i) {                                       // Punkte des Halses
+        float t = static_cast<float>(i) / 10.0f;                          // Anteil
+        neck.push_back(Vec3(-0.1f - 0.5f * t, -0.1f + 1.3f * std::sin(t * 1.6f), 0)); // Nach vorne und oben gebogen
+    }                                                                     // Ende des Halses
+    tube(neck, 0.24f, 0);                                                 // Halsröhre
+    std::vector<Vec3> head = {Vec3(-0.55f, 1.15f, 0), Vec3(-0.8f, 1.2f, 0), Vec3(-1.05f, 1.15f, 0), Vec3(-1.2f, 1.08f, 0)}; // Kopf nach vorne
+    tube(head, 0.3f, 0);                                                  // Kopfröhre
+    for (int side = -1; side <= 1; side += 2) {                           // Zwei Augen
+        Vec3 c(-0.85f, 1.32f, 0.2f * static_cast<float>(side));           // Augenmitte
+        int b = static_cast<int>(out.positions.size());                   // Erster Punkt
+        const float s = 0.07f;                                            // Halbe Kantenlänge
+        for (int k = 0; k < 8; ++k) out.positions.push_back(c + Vec3((k & 1) ? s : -s, (k & 2) ? s : -s, (k & 4) ? s : -s)); // Würfelecken
+        const int f[12][3] = {{0, 1, 3}, {0, 3, 2}, {4, 6, 7}, {4, 7, 5}, {0, 4, 5}, {0, 5, 1}, {2, 3, 7}, {2, 7, 6}, {0, 2, 6}, {0, 6, 4}, {1, 5, 7}, {1, 7, 3}}; // Würfelflächen
+        for (const auto& tri : f) { Triangle t; t.v[0] = b + tri[0]; t.v[1] = b + tri[1]; t.v[2] = b + tri[2]; t.material = 2; out.triangles.push_back(t); } // Dreiecke speichern
+    }                                                                     // Ende der Augen
+} // Ende von buildSerpent
+
 // Baut ein Modell aus Datei, Teilen und Sondertypen zusammen
 bool ModelLibrary::buildMesh(const std::string& name, Mesh& out, int depth) { // Beginn von buildMesh
     auto it = m_defs.find(name);                                          // Definition suchen
@@ -164,18 +229,31 @@ bool ModelLibrary::buildMesh(const std::string& name, Mesh& out, int depth) { //
             if (!loadObj(ImageIO::joinPath(m_assetDir, d.file), m, err)) { std::cout << "Modell '" << name << "': " << err << "\n"; return false; } // Laden
             raw = m_rawObj.emplace(d.file, std::move(m)).first;           // Speichern
         }                                                                 // Ende Laden
-        base.append(raw->second, Mat4());                                 // Übernehmen
+        if (d.onlyGroups.empty() && d.skipGroups.empty()) {               // Ganze Datei verwenden
+            base.append(raw->second, Mat4());                             // Übernehmen
+        } else {                                                          // Nur ausgewählte Gruppen
+            Mesh filtered = raw->second;                                  // Kopie
+            filtered.triangles.clear();                                   // Dreiecke neu auswählen
+            for (const Triangle& t : raw->second.triangles) {             // Alle Dreiecke
+                const std::string& g = raw->second.groups[static_cast<std::size_t>(t.group)]; // Gruppenname
+                bool inOnly = d.onlyGroups.empty() || std::find(d.onlyGroups.begin(), d.onlyGroups.end(), g) != d.onlyGroups.end(); // Gewünscht?
+                bool inSkip = std::find(d.skipGroups.begin(), d.skipGroups.end(), g) != d.skipGroups.end(); // Ausgeschlossen?
+                if (inOnly && !inSkip) filtered.triangles.push_back(t);   // Übernehmen
+            }                                                             // Ende der Schleife
+            base.append(filtered, Mat4());                                // Gefiltertes Modell übernehmen
+        }                                                                 // Ende der Gruppenauswahl
     }                                                                     // Ende Datei
     if (d.type == "haus") buildHouse(d, base);                            // Haus generieren
+    if (d.type == "seeschlange") buildSerpent(base);                      // Seeungeheuer generieren
     for (const std::string& partText : d.parts) {                         // Alle Teile
         std::vector<std::string> p = split(partText, '|');                // "name | x,y,z | drehung | skalierung"
         Mesh part;                                                        // Teilmodell
         if (p.empty() || !buildMesh(p[0], part, depth + 1)) continue;     // Teil bauen
         Vec3 pos = p.size() > 1 ? parseVec(p[1]) : Vec3();                // Position
-        float rot = p.size() > 2 ? std::strtof(p[2].c_str(), nullptr) : 0.0f; // Drehung
+        Vec3 rot = p.size() > 2 ? (p[2].find(',') != std::string::npos ? parseVec(p[2]) : Vec3(0.0f, std::strtof(p[2].c_str(), nullptr), 0.0f)) : Vec3(); // Drehung (nur y oder x, y, z)
         float sc = p.size() > 3 ? std::strtof(p[3].c_str(), nullptr) : 1.0f; // Skalierung
         if (sc <= 0.0f) sc = 1.0f;                                        // Ungültige Skalierung abfangen
-        base.append(part, Mat4::translation(pos) * Mat4::rotationY(rot * DEG) * Mat4::scale(Vec3(sc, sc, sc))); // Teil anhängen
+        base.append(part, Mat4::translation(pos) * eulerXYZ(rot) * Mat4::scale(Vec3(sc, sc, sc))); // Teil anhängen
     }                                                                     // Ende der Teileschleife
     for (Material& m : base.materials) {                                  // Farben anpassen
         auto rc = d.recolor.find(m.name);                                 // Ersatzfarbe für dieses Material?

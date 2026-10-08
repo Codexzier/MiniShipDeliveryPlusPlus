@@ -289,6 +289,48 @@ void Canvas::blitScaled(const Image& src, const RectI& srcRect, const RectI& dst
     }                                                           // Ende der Zeilenschleife
 } // Ende von blitScaled
 
+// Zeichnet ein Bild um seinen Mittelpunkt gedreht (für Pfeile und Kompassnadeln)
+void Canvas::blitRotated(const Image& src, int cx, int cy, float angle) {      // Beginn von blitRotated
+    if (src.empty()) return;                                                    // Nichts zu zeichnen
+    float c = std::cos(angle), s = std::sin(angle);                             // Drehwerte
+    float hw = static_cast<float>(src.width) * 0.5f;                            // Halbe Breite
+    float hh = static_cast<float>(src.height) * 0.5f;                           // Halbe Höhe
+    int r = static_cast<int>(std::ceil(std::sqrt(hw * hw + hh * hh)));          // Radius des gedrehten Bildes
+    for (int y = -r; y <= r; ++y) {                                             // Alle Zielzeilen
+        for (int x = -r; x <= r; ++x) {                                         // Alle Zielspalten
+            float sx = c * static_cast<float>(x) + s * static_cast<float>(y) + hw; // Rückwärts gedrehte Quellspalte
+            float sy = -s * static_cast<float>(x) + c * static_cast<float>(y) + hh; // Rückwärts gedrehte Quellzeile
+            int ix = static_cast<int>(std::floor(sx));                          // Ganzzahlig
+            int iy = static_cast<int>(std::floor(sy));                          // Ganzzahlig
+            if (ix < 0 || iy < 0 || ix >= src.width || iy >= src.height) continue; // Außerhalb des Quellbildes
+            Color col = src.pixels[static_cast<std::size_t>(iy) * src.width + ix]; // Quellfarbe
+            if (alphaOf(col) != 0) putPixel(cx + x, cy + y, col);               // Sichtbare Pixel setzen
+        }                                                                       // Ende der Spaltenschleife
+    }                                                                           // Ende der Zeilenschleife
+} // Ende von blitRotated
+
+// Zeichnet ein Bild mit zusätzlicher Durchsichtigkeit (z.B. zum Ein- und Ausblenden)
+void Canvas::blitAlpha(const Image& src, int dx, int dy, int alpha) {           // Beginn von blitAlpha
+    if (alpha >= 255) { blit(src, dx, dy); return; }                            // Voll deckend: normale Funktion
+    if (alpha <= 0 || src.empty()) return;                                      // Unsichtbar: nichts tun
+    for (int y = std::max(0, src.firstRow); y <= src.lastRow && y < src.height; ++y) { // Sichtbare Zeilen
+        for (int x = 0; x < src.width; ++x) {                                   // Alle Spalten
+            Color col = src.pixels[static_cast<std::size_t>(y) * src.width + x]; // Quellfarbe
+            int a = alphaOf(col) * alpha / 255;                                 // Kombinierte Deckkraft
+            if (a > 0) putPixel(dx + x, dy + y, withAlpha(col, a));             // Gemischt zeichnen
+        }                                                                       // Ende der Spaltenschleife
+    }                                                                           // Ende der Zeilenschleife
+} // Ende von blitAlpha
+
+// Multipliziert jedes Pixel mit einer Farbe (Nacht, Sturm)
+void Canvas::multiply(Color factor) {                                           // Beginn von multiply
+    int fr = redOf(factor), fg = greenOf(factor), fb = blueOf(factor);          // Faktoren 0..255
+    if (fr == 255 && fg == 255 && fb == 255) return;                            // Weiß ändert nichts
+    for (Color& p : m_target.pixels) {                                          // Alle Pixel
+        p = rgba(redOf(p) * fr / 255, greenOf(p) * fg / 255, blueOf(p) * fb / 255, alphaOf(p)); // Kanalweise multiplizieren
+    }                                                                           // Ende der Schleife
+} // Ende von multiply
+
 // Erzeugt eine skalierte Kopie eines Bildes
 Image scaleImage(const Image& src, int newWidth, int newHeight) { // Beginn von scaleImage
     Image result(newWidth, newHeight);                          // Neues, leeres Bild in Zielgröße

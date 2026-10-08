@@ -199,6 +199,14 @@ std::vector<std::string> PropertyFile::sectionNames() const {  // Beginn von sec
     return names;                                              // Liste zurückgeben
 } // Ende von sectionNames
 
+// Liefert alle Eigenschaftsnamen eines Objekts
+std::vector<std::string> PropertyFile::keys(const std::string& section) const { // Beginn von keys
+    std::vector<std::string> result;                           // Ergebnisliste
+    const Section* s = findSection(section);                   // Objekt suchen
+    if (s) for (const Entry& e : s->entries) result.push_back(e.key); // Alle Namen übernehmen
+    return result;                                             // Liste zurückgeben
+} // Ende von keys
+
 // Liefert alle Objektnamen, die mit einem bestimmten Präfix beginnen (z.B. "Graben")
 std::vector<std::string> PropertyFile::sectionsWithPrefix(const std::string& prefix) const { // Beginn von sectionsWithPrefix
     std::vector<std::string> names;                            // Ergebnisliste

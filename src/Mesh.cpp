@@ -30,6 +30,8 @@ void Mesh::append(const Mesh& other, const Mat4& transform, Color tint) {     //
     int vOffset = static_cast<int>(positions.size());                         // Verschiebung der Punktindizes
     int uvOffset = static_cast<int>(uvs.size() / 2);                          // Verschiebung der UV-Indizes
     int mOffset = static_cast<int>(materials.size());                         // Verschiebung der Materialindizes
+    int gOffset = static_cast<int>(groups.size());                            // Verschiebung der Gruppenindizes
+    groups.insert(groups.end(), other.groups.begin(), other.groups.end());    // Gruppennamen übernehmen
     for (const Vec3& p : other.positions) positions.push_back(transform.transformPoint(p)); // Punkte transformiert übernehmen
     uvs.insert(uvs.end(), other.uvs.begin(), other.uvs.end());                // Texturkoordinaten übernehmen
     for (Material m : other.materials) {                                      // Materialien kopieren
@@ -42,6 +44,7 @@ void Mesh::append(const Mesh& other, const Mat4& transform, Color tint) {     //
             if (t.uv[i] >= 0) t.uv[i] += uvOffset;                            // UV-Index verschieben
         }                                                                     // Ende der Eckenschleife
         t.material += mOffset;                                                // Materialindex verschieben
+        t.group += other.groups.empty() ? 0 : gOffset;                        // Gruppenindex verschieben
         triangles.push_back(t);                                               // Speichern
     }                                                                         // Ende der Schleife
 } // Ende von append
@@ -95,6 +98,8 @@ bool loadObj(const std::string& path, Mesh& out, std::string& error) {        //
     std::map<std::string, Material> mtlTable;                                 // Materialien aus der MTL-Datei
     std::map<std::string, int> materialIndex;                                 // Materialname -> Index im Mesh
     int currentMaterial = -1;                                                 // Aktuelles Material (noch keins)
+    out.groups.push_back("standard");                                         // Gruppe für Flächen vor dem ersten "g"
+    int currentGroup = 0;                                                     // Aktuelle Gruppe
     std::string line;                                                         // Zeilenpuffer
     std::vector<int> faceV;                                                   // Punktindizes einer Fläche
     std::vector<int> faceT;                                                   // UV-Indizes einer Fläche
@@ -137,8 +142,16 @@ bool loadObj(const std::string& path, Mesh& out, std::string& error) {        //
                 t.v[0] = faceV[0]; t.v[1] = faceV[k]; t.v[2] = faceV[k + 1];  // Eckpunkte
                 t.uv[0] = faceT[0]; t.uv[1] = faceT[k]; t.uv[2] = faceT[k + 1]; // Texturkoordinaten
                 t.material = currentMaterial;                                 // Material
+                t.group = currentGroup;                                       // Gruppe
                 if (t.v[0] >= 0 && t.v[1] >= 0 && t.v[2] >= 0) out.triangles.push_back(t); // Nur gültige Dreiecke speichern
             }                                                                 // Ende der Zerlegung
+        } else if ((line[0] == 'g' || line[0] == 'o') && line[1] == ' ') {   // Neue Gruppe "g name"
+            std::string name = line.substr(2);                                // Gruppenname
+            while (!name.empty() && (name.back() == ' ' || name.back() == '\r')) name.pop_back(); // Leerzeichen am Ende entfernen
+            std::size_t space = name.find(' ');                               // Kenney hängt oft " 1" an
+            if (space != std::string::npos) name = name.substr(0, space);     // Nur das erste Wort
+            out.groups.push_back(name);                                       // Gruppe speichern
+            currentGroup = static_cast<int>(out.groups.size()) - 1;           // Als aktuelle Gruppe verwenden
         } else if (line.compare(0, 6, "mtllib") == 0) {                       // Materialbibliothek
             std::string name = line.substr(7);                                // Dateiname
             while (!name.empty() && (name.back() == ' ' || name.back() == '\r')) name.pop_back(); // Leerzeichen am Ende entfernen

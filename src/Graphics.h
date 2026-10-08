@@ -55,6 +55,10 @@ public:                                                    // Öffentliche Schni
     void blit(const Image& src, int dx, int dy, bool flipX = false); // Ganzes Bild zeichnen
     void blitRegion(const Image& src, const RectI& srcRect, int dx, int dy, bool flipX = false); // Ausschnitt zeichnen
     void blitScaled(const Image& src, const RectI& srcRect, const RectI& dstRect, bool flipX = false); // Skaliert zeichnen
+    void blitRotated(const Image& src, int cx, int cy, float angle);           // Um den Mittelpunkt gedreht zeichnen (Radiant)
+    void blitAlpha(const Image& src, int dx, int dy, int alpha);               // Mit zusätzlicher Durchsichtigkeit zeichnen (0..255)
+    void multiply(Color factor);                                               // Ganzes Bild einfärben (z.B. Nacht)
+    const RectI& clip() const { return m_clip; }                               // Aktueller Zeichenbereich
 
 private:                                                   // Interne Daten
     Image& m_target;                                       // Zielbild, in das gezeichnet wird

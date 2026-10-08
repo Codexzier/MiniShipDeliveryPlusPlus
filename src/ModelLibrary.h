@@ -38,6 +38,8 @@ private:                                                                        
         std::map<std::string, Color> recolor;                                      // Materialfarben ersetzen
         Color tint = rgba(255, 255, 255);                                          // Einfärbung
         std::vector<std::string> parts;                                            // Teile (zusammengesetztes Modell)
+        std::vector<std::string> onlyGroups;                                       // Nur diese OBJ-Gruppen verwenden
+        std::vector<std::string> skipGroups;                                       // Diese OBJ-Gruppen weglassen
         std::string type;                                                          // Sonderarten: "haus"
         int houseSize = 2;                                                         // Haus: Zellen je Seite (1 oder 2)
         int floors = 1;                                                            // Haus: Stockwerke
@@ -61,6 +63,7 @@ private:                                                                        
 
     bool buildMesh(const std::string& name, Mesh& out, int depth);                // Modell zusammenbauen
     void buildHouse(const Def& def, Mesh& out);                                    // Haus aus Bauteilen erzeugen
+    static void buildSerpent(Mesh& out);                                           // Seeungeheuer aus Röhren erzeugen
     bool loadFigure(Figure& f);                                                    // Figur laden
 
     std::string m_assetDir;                                                        // Asset-Ordner

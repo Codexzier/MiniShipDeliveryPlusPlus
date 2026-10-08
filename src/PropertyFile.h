@@ -29,6 +29,7 @@ public:                                                      // Öffentliche Sch
     void setInt(const std::string& section, const std::string& key, int value);             // Ganzzahl setzen
 
     std::vector<std::string> sectionNames() const;                                   // Alle Objektnamen in Dateireihenfolge
+    std::vector<std::string> keys(const std::string& section) const;                 // Alle Eigenschaftsnamen eines Objekts
     std::vector<std::string> sectionsWithPrefix(const std::string& prefix) const;    // Objektnamen, die mit prefix beginnen
     const std::string& path() const { return m_path; }                               // Pfad der zuletzt geladenen Datei
 
