@@ -139,6 +139,8 @@ bool GameData::load(const std::string& dataDir, std::string& error) {        // 
     for (const std::string& id : f.sectionNames()) {                         // Alle Abschnitte
         if (PropertyFile::toLower(id) == "entdecker") {                      // Schwellen der Entdeckerpunkte
             for (int tier = 1; tier <= 9; ++tier) explorerThresholds.push_back(f.getInt(id, "stufe_" + std::to_string(tier), tier == 1 ? 0 : 999999)); // Je Stufe
+            artifactsOnMap = clampValue(f.getInt(id, "anzahl_auf_karte", 6), 1, 40); // Höchstzahl auf der Karte
+            artifactsPerDay = clampValue(f.getInt(id, "neue_pro_tag", 2), 0, 40);    // Neue je Tag
             continue;                                                        // Weiter
         }                                                                    // Ende Entdecker
         ArtifactDef a;                                                       // Neues Artefakt
@@ -170,6 +172,7 @@ bool GameData::load(const std::string& dataDir, std::string& error) {        // 
         t.buyFactor = f.getFloat(id, "preisfaktor_ankauf", 1.35f);           // Ankaufspreis
         t.sellFactor = f.getFloat(id, "preisfaktor_verkauf", 1.2f);          // Verkaufspreis
         t.freshBonus = f.getFloat(id, "frische_bonus", 0.3f);                // Frischezuschlag
+        t.deliveryBonus = f.getFloat(id, "lieferbonus", 0.3f);               // Lieferbonus
         traders.push_back(t);                                                // Speichern
     }                                                                        // Ende der Händlerschleife
     if (!f.load(ImageIO::joinPath(dataDir, "hersteller.txt"))) { error = "data/hersteller.txt fehlt"; return false; } // Hersteller
@@ -181,6 +184,8 @@ bool GameData::load(const std::string& dataDir, std::string& error) {        // 
         p.rawGoods = f.getList(id, "rohwaren");                              // Rohwaren
         p.productionHours = std::max(0.1f, f.getFloat(id, "produktionszeit", 3.0f)); // Produktionszeit
         p.storage = std::max(4, f.getInt(id, "lager", 30));                  // Lager
+        p.rawMax = std::max(1, f.getInt(id, "rohwaren_max", 12));            // Höchstmenge je Rohware
+        p.startStock = std::max(0, f.getInt(id, "start_bestand", 2));        // Startbestand
         p.buyFactor = f.getFloat(id, "preisfaktor_ankauf", 1.4f);            // Ankaufspreis
         p.sellFactor = f.getFloat(id, "preisfaktor_verkauf", 0.9f);          // Verkaufspreis
         for (const std::string& product : f.getList(id, "produkte")) {       // Alle Produkte

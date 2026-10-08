@@ -1,0 +1,41 @@
+# ============================================================
+# Musik und Geräusche
+#
+# Dateinamen relativ zum Ordner assets/ (WAV, OGG oder MP3).
+# Fehlt eine Datei, erzeugt das Spiel einen einfachen synthetischen Platzhalter-Klang,
+# solange platzhalter_klaenge = ja ist.
+#
+# HINWEIS: Im Repository wurden bisher keine Audiodateien gefunden. Sobald sie im Ordner
+# assets/ liegen (z.B. assets/Audio/...), hier nur die Pfade eintragen.
+# ============================================================
+
+[Einstellungen]
+ton_an = ja
+musik_lautstaerke = 55
+effekt_lautstaerke = 80
+platzhalter_klaenge = ja
+
+[Effekte]
+klick = Audio/click.ogg
+kaufen = Audio/coins_buy.ogg
+verkaufen = Audio/coins_sell.ogg
+kanone = Audio/cannon.ogg
+treffer = Audio/hit.ogg
+platsch = Audio/splash.ogg
+anlegen = Audio/dock.ogg
+glocke = Audio/bell.ogg
+monster = Audio/monster.ogg
+fund = Audio/treasure.ogg
+kentern = Audio/capsize.ogg
+fehler = Audio/error.ogg
+
+[Musik]
+menue = Audio/music_menu.ogg
+meer_tag = Audio/music_sea_day.ogg
+meer_nacht = Audio/music_sea_night.ogg
+insel = Audio/music_island.ogg
+
+[Hintergrund]
+wellen = Audio/loop_waves.ogg
+sturm = Audio/loop_storm.ogg
+regen = Audio/loop_rain.ogg

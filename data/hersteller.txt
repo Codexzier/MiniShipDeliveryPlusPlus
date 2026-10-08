@@ -1,0 +1,56 @@
+# ============================================================
+# Hersteller - kaufen nur Rohwaren, verkaufen nur ihre Produkte.
+# Wie viel sie herstellen, hängt von den gelieferten Rohwaren ab; der Lagerplatz begrenzt den Ankauf.
+#
+# name                = Anzeigename
+# figur               = Figur vor der Werkstatt
+# rohwaren            = angekaufte Rohwaren
+# produkte            = hergestellte Produkte
+# rezept_<Produkt>    = Ware:Menge, ...  (verbrauchte Rohwaren je Produkt)
+# produktionszeit     = Spielstunden je Produkt
+# lager               = Lagerplatz in Einheiten (Rohwaren + Produkte)
+# rohwaren_max        = Höchstmenge je Rohware, die angekauft wird
+# preisfaktor_ankauf  = zahlt so viel mal den Inselpreis für Rohwaren (mehr als das Kontor)
+# preisfaktor_verkauf = verlangt so viel mal den Inselpreis für Produkte
+# start_bestand       = Produkte, die beim Spielstart bereits auf Lager sind
+# ============================================================
+
+[Tischler]
+name = Tischlerei
+figur = handwerker
+rohwaren = Holz, Naegel, Werkzeug
+produkte = Tische, Stuehle
+rezept_Tische = Holz:3, Naegel:2, Werkzeug:1
+rezept_Stuehle = Holz:2, Naegel:1
+produktionszeit = 2
+lager = 40
+rohwaren_max = 12
+preisfaktor_ankauf = 1.4
+preisfaktor_verkauf = 0.85
+start_bestand = 2
+
+[Uhrmacher]
+name = Uhrmacherei
+figur = handwerker_b
+rohwaren = Bronzeplatten, Werkzeug
+produkte = Uhren
+rezept_Uhren = Bronzeplatten:2, Werkzeug:1
+produktionszeit = 3
+lager = 24
+rohwaren_max = 10
+preisfaktor_ankauf = 1.45
+preisfaktor_verkauf = 0.85
+start_bestand = 1
+
+[Kartenhersteller]
+name = Kartenzeichner
+figur = handwerker_b
+rohwaren = Papier, Tinte
+produkte = Seekarten
+rezept_Seekarten = Papier:3, Tinte:1
+produktionszeit = 2
+lager = 30
+rohwaren_max = 12
+preisfaktor_ankauf = 1.4
+preisfaktor_verkauf = 0.85
+start_bestand = 2

@@ -75,6 +75,8 @@ skalierung = 0.2
 [stein]
 datei = Nature Kit/Models/OBJ format/rock_small1.obj
 skalierung = 0.2
+farbe_natureKit-wood = 150, 148, 140
+farbe_natureKit-leavesGreen = 110, 150, 95
 
 [felsen_wasser]
 datei = Pirate Kit/Models/OBJ format/formation_rock.obj
@@ -262,6 +264,12 @@ toenung = 200, 190, 190
 datei = Fantasy Town Kit/Models/OBJ format/chimney.obj
 versatz = -0.3, 0, 0
 toenung = 90, 90, 95
+
+[kiste]
+datei = Furniture Kit/Models/OBJ format/cardboardBoxClosed.obj
+skalierung = 1.3
+versatz = 0.14, 0, -0.14
+toenung = 200, 160, 110
 
 [kanonenkugel]
 datei = Pirate Kit/Models/OBJ format/cannonBall.obj

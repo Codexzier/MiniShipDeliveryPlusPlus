@@ -114,9 +114,11 @@ bool Ui::button(const RectI& r, const std::string& label, bool enabled, bool hig
     const char* name = !enabled ? "button_rectangleMetal" : ((over || highlighted) ? "button_rectangleRed" : "button_rectangleWood"); // Aussehen
     if (const Image* img = get(name)) nineSlice(*img, r, 14);                // Knopfbild
     else m_canvas->fillRect(r.x, r.y, r.w, r.h, rgba(180, 120, 60));         // Ersatz
-    Color c = !enabled ? rgba(90, 90, 95) : UiColor::WHITE;                  // Schriftfarbe
     int scale = textWidth(label, 2) <= r.w - 16 ? 2 : 1;                     // Schrift verkleinern, wenn der Text zu lang ist
-    textShadow(r.x + (r.w - textWidth(label, scale)) / 2, r.y + (r.h - 7 * scale) / 2, label, c, scale); // Beschriftung mittig
+    int tx = r.x + (r.w - textWidth(label, scale)) / 2, ty = r.y + (r.h - 7 * scale) / 2; // Beschriftung mittig
+    if (!enabled) text(tx, ty, label, rgba(90, 90, 95), scale);              // Gesperrt: grau
+    else if (over || highlighted) textShadow(tx, ty, label, UiColor::WHITE, scale); // Rot hinterlegt: weiß
+    else text(tx, ty, label, UiColor::INK, scale);                           // Heller Holzknopf: dunkle Schrift
     m_panels.push_back(r);                                                   // Knopf gehört zur Oberfläche
     return enabled && clickedIn(r);                                          // Klick melden
 } // Ende von button
@@ -180,6 +182,13 @@ void Ui::icon(const std::string& name, int cx, int cy, float angle) {        // 
     if (angle == 0.0f) m_canvas->blit(*img, cx - img->width / 2, cy - img->height / 2); // Ungedreht
     else m_canvas->blitRotated(*img, cx, cy, angle);                         // Gedreht
 } // Ende von icon
+
+// Zeichnet ein Symbol zentriert in einer bestimmten Größe
+void Ui::iconScaled(const std::string& name, int cx, int cy, int size) {     // Beginn von iconScaled
+    const Image* img = get(name);                                            // Bild suchen
+    if (!img) return;                                                        // Fehlt
+    m_canvas->blitScaled(*img, RectI{0, 0, img->width, img->height}, RectI{cx - size / 2, cy - size / 2, size, size}); // Skaliert zeichnen
+} // Ende von iconScaled
 
 void Ui::image(const Image& img, int x, int y) { m_canvas->blit(img, x, y); } // Bild zeichnen
 

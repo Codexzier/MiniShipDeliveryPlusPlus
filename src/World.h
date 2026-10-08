@@ -47,6 +47,7 @@ struct Building {                             // Beginn der Struktur
     float doorY = 0.0f;                       // Interaktionspunkt y
     float facing = 0.0f;                      // Blickrichtung der Tür (Radiant)
     std::string figure;                       // Figur, die vor der Tür steht
+    std::string model;                        // Modell des Gebäudes oder Marktstands (zum Anklicken)
 }; // Ende der Struktur Building
 
 // Eine Insel
@@ -116,6 +117,8 @@ public:                                                                         
     float routeDistance(float x, float y) const;                                // Abstand zur nächsten Handelsroute
     const Zone* zoneAt(float x, float y, const std::string& kind) const;        // Zone einer Art an einer Position
     std::vector<std::pair<float, float>> findPath(float sx, float sy, float tx, float ty) const; // Weg zu Fuß (A*)
+    std::vector<std::pair<float, float>> findSeaPath(float sx, float sy, float tx, float ty, float draft) const; // Seeweg für den Autopiloten (A*, geglättet)
+    bool clearLine(float ax, float ay, float bx, float by, float draft) const;  // Freie Fahrt auf einer geraden Linie?
     void drawTerrain(Canvas& canvas, const Camera& cam, float time) const;      // Boden und Wasser zeichnen
     std::pair<float, float> randomSeaPoint(unsigned seed, float minDepth) const; // Zufälliger Punkt auf offener See
 

@@ -1,0 +1,91 @@
+# ============================================================
+# Animierte Figuren (Kenney "Animated Characters", FBX mit Skelett)
+#
+# modell        = FBX-Datei mit Netz und Skin (relativ zu assets/)
+# skin          = Textur (PNG)
+# hoehe         = Größe in Kacheln
+# bilder        = Bilder je Animation (mehr = flüssiger, aber mehr Speicher)
+# vorne         = Blickrichtung des Modells in Grad
+# anim_stehen   = Datei | Animationsname im FBX
+# anim_laufen   = Datei | Animationsname im FBX
+# anim_springen = Datei | Animationsname im FBX
+# ============================================================
+
+[spieler]
+modell = Animated Characters 1/Model/characterMedium.fbx
+skin = Animated Characters 1/Skins/survivorMaleB.png
+hoehe = 0.95
+bilder = 8
+anim_stehen = Animated Characters 1/Animations/idle.fbx | Root|Idle
+anim_laufen = Animated Characters 1/Animations/run.fbx | Root|Run
+anim_springen = Animated Characters 1/Animations/jump.fbx | Root|Jump
+
+[haendler]
+modell = Animated Characters 1/Model/characterMedium.fbx
+skin = Animated Characters 2/Skins/criminalMaleA.png
+hoehe = 0.95
+bilder = 6
+anim_stehen = Animated Characters 1/Animations/idle.fbx | Root|Idle
+
+[haendlerin]
+modell = Animated Characters 1/Model/characterMedium.fbx
+skin = Animated Characters 1/Skins/survivorFemaleA.png
+hoehe = 0.9
+bilder = 6
+anim_stehen = Animated Characters 1/Animations/idle.fbx | Root|Idle
+
+[handwerker]
+modell = Animated Characters 1/Model/characterMedium.fbx
+skin = Animated Characters 2/Skins/criminalMaleA.png
+hoehe = 1.0
+bilder = 6
+anim_stehen = Animated Characters 1/Animations/idle.fbx | Root|Idle
+
+[handwerker_b]
+modell = Animated Characters 1/Model/characterMedium.fbx
+skin = Animated Characters 2/Skins/cyborgFemaleA.png
+hoehe = 0.9
+bilder = 6
+anim_stehen = Animated Characters 1/Animations/idle.fbx | Root|Idle
+
+[beamter]
+modell = Animated Characters 1/Model/characterMedium.fbx
+skin = Animated Characters 2/Skins/cyborgFemaleA.png
+hoehe = 0.92
+bilder = 6
+anim_stehen = Animated Characters 1/Animations/idle.fbx | Root|Idle
+
+[inselbewohner]
+modell = Animated Characters 1/Model/characterMedium.fbx
+skin = Animated Characters 1/Skins/zombieA.png
+hoehe = 0.9
+bilder = 6
+anim_stehen = Animated Characters 1/Animations/idle.fbx | Root|Idle
+
+[matrose]
+modell = Animated Characters 1/Model/characterMedium.fbx
+skin = Animated Characters 1/Skins/survivorMaleB.png
+hoehe = 0.9
+bilder = 6
+anim_stehen = Animated Characters 1/Animations/idle.fbx | Root|Idle
+
+[matrose_b]
+modell = Animated Characters 1/Model/characterMedium.fbx
+skin = Animated Characters 1/Skins/survivorFemaleA.png
+hoehe = 0.9
+bilder = 6
+anim_stehen = Animated Characters 1/Animations/idle.fbx | Root|Idle
+
+[matrose_c]
+modell = Animated Characters 1/Model/characterMedium.fbx
+skin = Animated Characters 2/Skins/criminalMaleA.png
+hoehe = 0.9
+bilder = 6
+anim_stehen = Animated Characters 1/Animations/idle.fbx | Root|Idle
+
+[matrose_d]
+modell = Animated Characters 1/Model/characterMedium.fbx
+skin = Animated Characters 2/Skins/cyborgFemaleA.png
+hoehe = 0.9
+bilder = 6
+anim_stehen = Animated Characters 1/Animations/idle.fbx | Root|Idle

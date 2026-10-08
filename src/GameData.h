@@ -105,6 +105,7 @@ struct TraderDef {                                      // Beginn der Struktur
     float buyFactor = 1.35f;                            // Er zahlt so viel mal den Grundpreis
     float sellFactor = 1.2f;                            // Er verlangt so viel mal den Grundpreis
     float freshBonus = 0.3f;                            // Zuschlag für frische verderbliche Ware
+    float deliveryBonus = 0.3f;                         // Jede gelieferte Einheit füllt den Verkaufsbestand so weit auf
 }; // Ende der Struktur TraderDef
 
 // Ein Hersteller (Tischler, Uhrenmacher, Kartenhersteller ...)
@@ -120,6 +121,8 @@ struct ProducerDef {                                    // Beginn der Struktur
     std::vector<Recipe> recipes;                        // Rezepte
     float productionHours = 3.0f;                       // Spielstunden je Produkt
     int storage = 30;                                   // Lagerplatz (Rohwaren + Produkte)
+    int rawMax = 12;                                    // Höchstmenge je Rohware, die angekauft wird
+    int startStock = 2;                                 // Produkte auf Lager beim Spielstart
     float buyFactor = 1.4f;                             // Zahlt so viel mal den Grundpreis für Rohwaren
     float sellFactor = 0.9f;                            // Verlangt so viel mal den Grundpreis für Produkte
 }; // Ende der Struktur ProducerDef
@@ -145,6 +148,8 @@ public:                                                                       //
     std::vector<TraderDef> traders;                                           // Alle Händlerarten
     std::vector<ProducerDef> producers;                                       // Alle Hersteller
     std::vector<int> explorerThresholds;                                      // Entdeckerpunkte je Artefaktstufe
+    int artifactsOnMap = 6;                                                   // Höchstzahl treibender Artefakte auf der Karte
+    int artifactsPerDay = 2;                                                  // Neue Artefakte je Spieltag
     std::vector<std::string> crewNames;                                       // Namen für Bewerber in der Taverne
 }; // Ende der Klasse GameData
 

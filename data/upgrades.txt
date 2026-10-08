@@ -1,0 +1,84 @@
+# ============================================================
+# Verbesserungen in der Werft
+#
+# name         = Anzeigename
+# beschreibung = Kurztext
+# attribut     = laderaum_breite, laderaum_hoehe, geschwindigkeit, reparatur, panzerung, abwehr,
+#                wendigkeit, sichtweite, rumpf, treibstoff_max, stabilitaet
+# wert         = Zuwachs je Stufe (absolut, in der Einheit des Attributs)
+# preis        = Preis der ersten Stufe (jede weitere Stufe kostet das Doppelte der vorherigen)
+# max_stufe    = Höchste Stufe
+# Beim Kauf eines neuen Schiffs gehen die Verbesserungen verloren.
+# ============================================================
+
+[Laderaum]
+name = Größerer Laderaum
+beschreibung = Ein zusätzliches Feld in jeder Reihe des Laderaums.
+attribut = laderaum_breite
+wert = 1
+preis = 400
+max_stufe = 2
+
+[Segel]
+name = Bessere Segel
+beschreibung = Leichtes Segeltuch für mehr Fahrt.
+attribut = geschwindigkeit
+wert = 0.3
+preis = 300
+max_stufe = 3
+
+[Rumpf]
+name = Verstärkter Rumpf
+beschreibung = Mehr Rumpfpunkte.
+attribut = rumpf
+wert = 30
+preis = 350
+max_stufe = 3
+
+[Panzerung]
+name = Kupferbeschlag
+beschreibung = Verringert jeden Schaden.
+attribut = panzerung
+wert = 8
+preis = 450
+max_stufe = 3
+
+[Kanonen]
+name = Zusätzliche Kanonen
+beschreibung = Mehr Abwehr gegen Piraten und Ungeheuer.
+attribut = abwehr
+wert = 8
+preis = 500
+max_stufe = 3
+
+[Ruder]
+name = Großes Ruder
+beschreibung = Das Schiff dreht schneller.
+attribut = wendigkeit
+wert = 15
+preis = 250
+max_stufe = 2
+
+[Fernrohr]
+name = Fernrohr
+beschreibung = Größere Sichtweite für Artefakte und Gefahren.
+attribut = sichtweite
+wert = 3
+preis = 200
+max_stufe = 3
+
+[Ballast]
+name = Ballastkiel
+beschreibung = Das Schiff verträgt mehr Schieflage beim Beladen.
+attribut = stabilitaet
+wert = 10
+preis = 300
+max_stufe = 2
+
+[Tank]
+name = Größerer Kohlenbunker
+beschreibung = Mehr Treibstoff für Maschinenschiffe.
+attribut = treibstoff_max
+wert = 40
+preis = 300
+max_stufe = 2

@@ -1,39 +1,192 @@
 # ============================================================
 # Mini Ship Delivery - allgemeine Einstellungen
 # Aufbau: [Objektname]  und darunter  eigenschaft = wert
-# Zeilen mit # sind Kommentare. Kommazahlen mit Punkt oder Komma.
+# Zeilen mit # sind Kommentare. Kommazahlen mit Punkt.
 # ============================================================
 
 [Fenster]
-# Text in der Titelleiste des Fensters
+# Text in der Titelleiste
 titel = Mini Ship Delivery
-# Fenstergröße in Pixel (das Bild wird in Software darauf skaliert)
+# Fenstergröße in Pixel (intern wird in dieser Größe per CPU gezeichnet)
 breite = 1280
 hoehe = 720
-# 1 = Vollbild, 0 = Fenster
-vollbild = 0
+# ja = Vollbild
+vollbild = nein
 # Höchstens so viele Bilder pro Sekunde (schont die CPU, z.B. auf dem Raspberry Pi)
 max_fps = 60
 
 [Grafik]
-# Größe eines Sprites bzw. einer Kachel in Pixel: 128 (Standard), 64 oder 32
-# Kleinere Werte sind schneller (gut für den Raspberry Pi).
-kachel_groesse = 128
-# Wie viele Kacheln nebeneinander sichtbar sind
-sicht_breite_kacheln = 10
-# Größe der Oberfläche (Menüleiste, Inventar, Schrift): 0 = automatisch
-ui_skalierung = 0
-# 1 = Platzhalter-Grafiken als BMP-Vorlagen in assets_dummies/ speichern
-dummies_exportieren = 1
+# Kachelbreite in Pixel beim Start: 128, 96, 64 oder 32 (kleiner = schneller, z.B. für den Raspberry Pi)
+kachel_groesse = 96
+# Erlaubte Zoomstufen (Mausrad oder +/-)
+zoomstufen = 64, 96, 128
+# Kantenglättung der 3D-Modelle: 1 = aus (schnell), 2 = an
+kantenglaettung = 2
+# Drehstufen der Schiffe (mehr = flüssigere Drehung, mehr Speicher)
+schiff_drehstufen = 32
+# Ordner der 2D-Oberflächengrafiken (relativ zu assets/)
+oberflaeche = Interface Pack/PNG/Retina
 
-[Spiel]
-# Datei der ersten Karte im Ordner data/
-start_level = level1.txt
+[Zeit]
+# Echte Sekunden pro Spielstunde (1 Spieltag = 24 x diesen Wert)
+sekunden_pro_stunde = 15
+# Uhrzeit beim Spielstart
+start_stunde = 7
+# Nacht beginnt / endet (Stunde)
+nacht_beginn = 21
+nacht_ende = 5
+# Spielzeit läuft weiter, während ein Fenster (Handel, Werft ...) offen ist?
+zeit_in_fenstern = nein
+
+[Start]
+credits = 600
+schiff = Kutter
+crew = Matrose
+kapitaen_gesundheit = 100
 
 [Steuerung]
-# Tastennamen wie bei SDL (z.B. A, D, Space, E, Q, Left, Right, Up)
+# Tastennamen wie bei SDL (z.B. W, A, S, D, E, M, I, Space, Escape, Tab, Left, Right, Up, Down)
+hoch = W
+runter = S
 links = A
 rechts = D
-springen = Space
-interagieren = E
-enterhaken = Q
+aktion = E
+seekarte = M
+schiffsinfo = I
+kanone = Space
+autopilot = T
+maschine = F
+zeitung = Z
+hilfe = F1
+pause = Escape
+drehen = R
+# Zoom: Mausrad oder die Tasten + und - (fest)
+
+[Figur]
+# Laufgeschwindigkeit in Kacheln pro Sekunde
+geschwindigkeit = 2.8
+# Bei weniger Gesundheit läuft der Kapitän langsamer
+verletzt_unter = 30
+# Gesundheit, die pro Spielstunde zurückkommt
+erholung = 2
+
+[Schiff]
+# Beschleunigung in Kacheln pro Sekunde²
+beschleunigung = 0.9
+# Rückwärtsfahrt (Riemen): Anteil der Höchstgeschwindigkeit
+rueckwaerts = 0.25
+# Abstand zum Liegeplatz, ab dem man anlegen kann (Kacheln)
+anlege_abstand = 3.0
+# Höchstgeschwindigkeit beim Anlegen
+anlege_tempo = 1.6
+# Schaden je Geschwindigkeit beim Auflaufen auf Land oder Felsen
+auflauf_schaden = 6
+# Abzug je fehlendem Besatzungsmitglied (Prozent auf Geschwindigkeit und Wendigkeit)
+unterbesetzung_malus = 18
+# Ohne Maschinist: Maschinenleistung und Mehrverbrauch
+ohne_maschinist_leistung = 0.5
+ohne_maschinist_verbrauch = 1.6
+# Sturmschaden pro Sekunde bei vollen Segeln ab dieser Windstärke (0..1)
+sturm_ab = 0.8
+sturm_schaden = 1.5
+# Rumpf, den die Crew auf See höchstens selbst wieder herstellt (Anteil)
+see_reparatur_max = 0.7
+
+[Kontor]
+# Der Kontor zahlt so viel mal den Inselpreis, wenn der Spieler verkauft
+ankauf = 0.85
+# Der Kontor verlangt so viel mal den Inselpreis, wenn der Spieler kauft
+verkauf = 1.1
+# Preisfaktor für eigene Waren der Insel (billig) und gesuchte Waren (teuer)
+eigene_ware = 0.7
+gesuchte_ware = 1.45
+# Tägliche Preisschwankung (0.12 = +-12 %)
+schwankung = 0.12
+# Preisverfall je verkaufter Einheit und Erholung pro Tag
+saettigung = 0.03
+saettigung_erholung = 0.3
+# Kohle für Maschinenschiffe (Credits je Einheit)
+treibstoff_preis = 2
+
+[Auftraege]
+# Angebote je Kontor und Tag
+angebote = 3
+# Höchstzahl gleichzeitig angenommener Aufträge
+max_aktiv = 3
+# Belohnung = Menge x Zielpreis x Faktor + Entfernung x Bonus
+belohnung_faktor = 1.6
+entfernung_bonus = 1.2
+# Strafe bei verpasster Frist (Anteil der Belohnung)
+strafe = 0.25
+# Zusätzliche Zeit für die Frist (Spielstunden)
+frist_puffer = 18
+
+[Werft]
+# Kosten je Rumpfpunkt
+reparatur_preis = 3
+# Anteil des Kaufpreises, der beim Schiffstausch angerechnet wird
+inzahlungnahme = 0.5
+
+[Taverne]
+# Übernachten (heilt den Kapitän und lässt die Zeit bis zum Morgen laufen)
+uebernachten_preis = 20
+aufwach_stunde = 7
+# Bewerber je Tag
+bewerber = 3
+
+[Oeffnungszeiten]
+# von - bis (Stunde); Taverne ist immer offen
+kontor = 6, 22
+haendler = 7, 19
+hersteller = 7, 19
+museum = 8, 20
+werft = 6, 21
+
+[Piraten]
+geschwindigkeit = 3.5
+sichtweite = 8
+sichtweite_nacht = 5
+lebenspunkte = 60
+kanonen_schaden = 9
+kanonen_reichweite = 5.5
+nachladen = 3
+# Wahrscheinlichkeit, dass Piraten auf einer sicheren Handelsroute angreifen
+angriff_auf_route = 0.15
+# Beim Entern gestohlener Anteil der Ladung
+raub_anteil = 0.5
+# Beute beim Versenken eines Piratenschiffs (Credits von - bis)
+beute = 120, 320
+
+[Monster]
+geschwindigkeit = 3.9
+schaden = 22
+biss_pause = 2
+lebenspunkte = 220
+sichtweite = 9
+
+[Spieler_Kanonen]
+reichweite = 6
+nachladen = 2.5
+
+[Wetter]
+# Spielstunden je Wetterabschnitt
+abschnitt = 3
+# Mittlere Windstärke (0..1) und Schwankung
+wind_mittel = 0.45
+wind_schwankung = 0.2
+# Drehung der Windrichtung je Abschnitt (Grad)
+wind_drehung = 35
+# Wahrscheinlichkeiten
+regen = 0.15
+nebel = 0.1
+# Ungenauigkeit der Vorhersage (0..1) ohne / mit Navigator
+vorhersage_fehler = 0.18
+vorhersage_fehler_navigator = 0.06
+
+[Minispiel]
+# Erlaubte Schlagseite in Grad (dazu kommt das Ballast-Upgrade)
+stabilitaet = 12
+# Gebühr der Hafenarbeiter je Ladeeinheit für "Automatisch beladen"
+arbeiter_gebuehr = 2
+# Schaden am Rumpf beim Kentern (Anteil)
+kentern_schaden = 0.3

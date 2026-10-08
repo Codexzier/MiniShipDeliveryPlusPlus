@@ -4,6 +4,7 @@
 #include <algorithm> // std::min, std::max, std::reverse
 #include <cmath>     // std::sqrt, std::atan2, std::sin, std::cos
 #include <cstdio>    // std::sscanf
+#include <cstdlib>   // std::abs
 #include <queue>     // std::priority_queue für A*
 
 #include "Rasterizer.h" // Iso-Projektion
@@ -372,6 +373,7 @@ void World::placeBuildings(Island& isl, int index, const PropertyFile& f) { // B
             WorldObject o;                                                // Hausmodell
             o.model = "gebaeude_" + (b.ref.empty() ? b.type : PropertyFile::toLower(b.ref)); // z.B. gebaeude_kontor
             if (b.type == "haendler") o.model = "gebaeude_laden";         // Händlerladen
+            b.model = o.model;                                            // Modell am Gebäude merken
             o.x = b.x;                                                    // Position x
             o.y = b.y;                                                    // Position y
             o.z = LAND_HEIGHT;                                            // Auf dem Boden
@@ -400,6 +402,7 @@ void World::placeBuildings(Island& isl, int index, const PropertyFile& f) { // B
         at(static_cast<int>(b.x), static_cast<int>(b.y)).blocked = true;  // Stand blockiert
         WorldObject o;                                                    // Standmodell
         o.model = k % 2 == 0 ? "marktstand_gruen" : "marktstand_rot";     // Abwechselnd grün und rot
+        b.model = o.model;                                                // Modell am Stand merken
         o.x = b.x;                                                        // Position x
         o.y = b.y;                                                        // Position y
         o.z = LAND_HEIGHT;                                                // Auf dem Boden
@@ -433,10 +436,10 @@ void World::decorate(Island& isl, int index, unsigned seed) {             // Beg
                 else if (!sand && roll < 0.26f) { model = "blumen"; solid = false; } // Blumen
                 else if (roll < 0.28f) model = "stein";                   // Steine
             } else if (style == "wald") {                                 // Waldinsel
-                if (!sand && roll < 0.32f) { float k = rnd.nextFloat(); model = k < 0.35f ? "baum" : (k < 0.7f ? "baum_eiche" : "baum_tanne"); } // Bäume
-                else if (!sand && roll < 0.38f) { model = "baumstumpf"; } // Baumstümpfe (Holzfäller)
-                else if (roll < 0.42f) { model = "busch"; solid = false; } // Büsche
-                else if (roll < 0.45f) model = "stein";                   // Steine
+                if (!sand && roll < 0.22f) { float k = rnd.nextFloat(); model = k < 0.35f ? "baum" : (k < 0.7f ? "baum_eiche" : "baum_tanne"); } // Bäume
+                else if (!sand && roll < 0.27f) { model = "baumstumpf"; } // Baumstümpfe (Holzfäller)
+                else if (roll < 0.31f) { model = "busch"; solid = false; } // Büsche
+                else if (roll < 0.33f) model = "stein";                   // Steine
             } else if (style == "grusel") {                               // Unheimliche Insel
                 if (!sand && roll < 0.14f) model = rnd.nextFloat() < 0.5f ? "baum_tot" : "baum_tot_krumm"; // Tote Bäume
                 else if (!sand && roll < 0.22f) model = rnd.nextFloat() < 0.5f ? "grabstein" : "grabstein_kreuz"; // Grabsteine
@@ -611,6 +614,80 @@ std::vector<std::pair<float, float>> World::findPath(float sx, float sy, float t
     if (!path.empty()) path.back() = {tx, ty};                            // Genauer Zielpunkt
     return path;                                                          // Weg zurückgeben
 } // Ende von findPath
+
+// Prüft, ob ein Schiff auf gerader Linie fahren kann (mit etwas Abstand zur Küste)
+bool World::clearLine(float ax, float ay, float bx, float by, float draft) const { // Beginn von clearLine
+    float len = std::sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay));  // Länge
+    int steps = std::max(1, static_cast<int>(len / 0.4f));                // Prüfpunkte alle 0,4 Kacheln
+    for (int i = 0; i <= steps; ++i) {                                    // Alle Prüfpunkte
+        float t = static_cast<float>(i) / static_cast<float>(steps);      // Anteil
+        float x = ax + (bx - ax) * t, y = ay + (by - ay) * t;             // Punkt
+        if (!sailable(x, y, draft + 0.3f)) return false;                  // Zu flach oder Hindernis
+    }                                                                     // Ende der Prüfpunkte
+    return true;                                                          // Frei
+} // Ende von clearLine
+
+// Sucht einen Seeweg (A* über Wasserkacheln), meidet Küsten und flaches Wasser und glättet das Ergebnis
+std::vector<std::pair<float, float>> World::findSeaPath(float sx, float sy, float tx, float ty, float draft) const { // Beginn von findSeaPath
+    std::vector<std::pair<float, float>> path;                            // Ergebnis
+    if (clearLine(sx, sy, tx, ty, draft)) { path.push_back({tx, ty}); return path; } // Gerade Linie frei: fertig
+    int startX = static_cast<int>(sx), startY = static_cast<int>(sy);     // Startkachel
+    int goalX = static_cast<int>(tx), goalY = static_cast<int>(ty);       // Zielkachel
+    if (startX < 0 || startY < 0 || startX >= m_w || startY >= m_h) return path; // Außerhalb
+    auto ok = [&](int x, int y) {                                         // Darf das Schiff diese Kachel benutzen?
+        if (!sailable(static_cast<float>(x) + 0.5f, static_cast<float>(y) + 0.5f, draft + 0.3f)) return false; // Zu flach oder Hindernis
+        const Tile& t = tile(x, y);                                       // Kachel
+        bool nearEnds = std::abs(x - goalX) + std::abs(y - goalY) < 7 || std::abs(x - startX) + std::abs(y - startY) < 4; // Nähe von Start oder Ziel
+        return t.coast >= 2 || nearEnds;                                  // Abstand zur Küste (außer an den Enden)
+    };                                                                    // Ende von ok
+    std::vector<float> cost(m_tiles.size(), INF);                         // Bisherige Kosten
+    std::vector<int> from(m_tiles.size(), -1);                            // Vorgänger
+    using Node = std::pair<float, int>;                                   // (Schätzung, Index)
+    std::priority_queue<Node, std::vector<Node>, std::greater<Node>> open; // Offene Liste
+    auto idx = [&](int x, int y) { return y * m_w + x; };                 // Index
+    auto heuristic = [&](int x, int y) { float dx = std::fabs(static_cast<float>(x - goalX)), dy = std::fabs(static_cast<float>(y - goalY)); return std::max(dx, dy) + 0.414f * std::min(dx, dy); }; // Schätzung
+    cost[static_cast<std::size_t>(idx(startX, startY))] = 0.0f;           // Start
+    open.push({heuristic(startX, startY), idx(startX, startY)});          // In die offene Liste
+    const int ndx[8] = {1, -1, 0, 0, 1, 1, -1, -1};                       // Nachbarn x
+    const int ndy[8] = {0, 0, 1, -1, 1, -1, 1, -1};                       // Nachbarn y
+    bool found = false;                                                   // Ziel erreicht?
+    int expanded = 0;                                                     // Zähler gegen Endlosschleifen
+    while (!open.empty() && expanded < 60000) {                           // Suchschleife
+        int cur = open.top().second;                                      // Bester Knoten
+        open.pop();                                                       // Entfernen
+        ++expanded;                                                       // Zählen
+        int cx = cur % m_w, cy = cur / m_w;                               // Koordinaten
+        if (cx == goalX && cy == goalY) { found = true; break; }          // Ziel erreicht
+        for (int k = 0; k < 8; ++k) {                                     // Nachbarn
+            int nx = cx + ndx[k], ny = cy + ndy[k];                       // Nachbar
+            if (nx < 0 || ny < 0 || nx >= m_w || ny >= m_h || !ok(nx, ny)) continue; // Nicht befahrbar
+            if (k >= 4 && (!ok(cx + ndx[k], cy) || !ok(cx, cy + ndy[k]))) continue; // Keine Ecken schneiden
+            const Tile& t = tile(nx, ny);                                 // Kachel
+            float step = (k >= 4 ? 1.4142f : 1.0f) + (t.coast < 4 ? 0.6f : 0.0f) + (t.terrain == Terrain::Shallow ? 1.0f : 0.0f); // Küste und Flachwasser kosten mehr
+            float nc = cost[static_cast<std::size_t>(cur)] + step;        // Neue Kosten
+            int ni = idx(nx, ny);                                         // Index
+            if (nc >= cost[static_cast<std::size_t>(ni)]) continue;       // Kein besserer Weg
+            cost[static_cast<std::size_t>(ni)] = nc;                      // Merken
+            from[static_cast<std::size_t>(ni)] = cur;                     // Vorgänger
+            open.push({nc + heuristic(nx, ny), ni});                      // Einreihen
+        }                                                                 // Ende der Nachbarn
+    }                                                                     // Ende der Suche
+    if (!found) return path;                                              // Kein Seeweg
+    std::vector<std::pair<float, float>> raw;                             // Ungeglätteter Weg
+    for (int cur = idx(goalX, goalY); cur >= 0 && cur != idx(startX, startY); cur = from[static_cast<std::size_t>(cur)]) raw.push_back({static_cast<float>(cur % m_w) + 0.5f, static_cast<float>(cur / m_w) + 0.5f}); // Rückverfolgen
+    std::reverse(raw.begin(), raw.end());                                 // Richtige Reihenfolge
+    if (!raw.empty()) raw.back() = {tx, ty};                              // Genauer Zielpunkt
+    float px = sx, py = sy;                                               // Letzter fester Punkt
+    std::size_t i = 0;                                                    // Aktueller Index
+    while (i < raw.size()) {                                              // Glätten: so weit wie möglich geradeaus
+        std::size_t j = raw.size() - 1;                                   // Vom Ende her probieren
+        while (j > i && !clearLine(px, py, raw[j].first, raw[j].second, draft)) --j; // Weitesten sichtbaren Punkt suchen
+        path.push_back(raw[j]);                                           // Wegpunkt
+        px = raw[j].first; py = raw[j].second;                            // Neuer Ausgangspunkt
+        i = j + 1;                                                        // Weiter danach
+    }                                                                     // Ende des Glättens
+    return path;                                                          // Ergebnis
+} // Ende von findSeaPath
 
 // Zeichnet Wasser und Land im sichtbaren Bereich
 void World::drawTerrain(Canvas& canvas, const Camera& cam, float time) const { // Beginn von drawTerrain

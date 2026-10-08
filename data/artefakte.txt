@@ -1,0 +1,77 @@
+# ============================================================
+# Artefakte - treiben auf See und werden mit dem Schiff eingesammelt.
+# Verkauf im Museum einer Hafenstadt gegen Credits und Entdeckerpunkte.
+#
+# name         = Anzeigename
+# beschreibung = Kurztext
+# modell       = Modell aus data/modelle.txt
+# stufe        = Seltenheit 1..4 (höhere Stufen erscheinen erst mit mehr Entdeckerpunkten)
+# wert         = Verkaufswert im Museum in Credits
+# punkte       = Entdeckerpunkte beim Verkauf
+#
+# [Entdecker] stufe_N = benötigte Entdeckerpunkte, damit Artefakte der Stufe N auf der Karte erscheinen
+# ============================================================
+
+[Entdecker]
+stufe_1 = 0
+stufe_2 = 25
+stufe_3 = 80
+stufe_4 = 200
+anzahl_auf_karte = 6
+neue_pro_tag = 2
+
+[Flaschenpost]
+name = Flaschenpost
+beschreibung = Eine verkorkte Flasche mit einem vergilbten Brief.
+modell = artefakt_flasche
+stufe = 1
+wert = 60
+punkte = 5
+
+[Teller]
+name = Alter Teller
+beschreibung = Ein Zinnteller mit eingraviertem Wappen.
+modell = artefakt_teller
+stufe = 1
+wert = 80
+punkte = 6
+
+[Kelch]
+name = Goldener Kelch
+beschreibung = Ein Kelch aus einem gesunkenen Kloster.
+modell = artefakt_kelch
+stufe = 2
+wert = 220
+punkte = 14
+
+[Urne]
+name = Verzierte Urne
+beschreibung = Bemalte Urne einer vergessenen Inselkultur.
+modell = artefakt_urne
+stufe = 2
+wert = 260
+punkte = 16
+
+[Schatztruhe]
+name = Schatztruhe
+beschreibung = Verrostet, aber schwer. Was mag darin sein?
+modell = artefakt_truhe
+stufe = 3
+wert = 650
+punkte = 30
+
+[Statue]
+name = Steinstatue
+beschreibung = Eine Statue aus der versunkenen Stadt.
+modell = artefakt_statue
+stufe = 3
+wert = 720
+punkte = 34
+
+[Obelisk]
+name = Obelisk der Gezeiten
+beschreibung = Ein Obelisk mit Sternenkarte - das Prunkstück jedes Museums.
+modell = artefakt_obelisk
+stufe = 4
+wert = 1800
+punkte = 80

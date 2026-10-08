@@ -1,0 +1,215 @@
+# ============================================================
+# Waren
+#
+# name         = Anzeigename
+# modell       = Modell aus data/modelle.txt (Symbol im Handel und im Laderaum)
+# beschreibung = Kurztext
+# kategorie    = rohware, fertigware, gemuese, obst, lebensmittel oder luxus
+# basispreis   = Grundpreis in Credits (Kontorpreis auf einer neutralen Insel)
+# gewicht      = Gewicht je Ladeeinheit (wichtig für die Balance im Laderaum)
+# verderblich  = Tage bis zum Verderben (0 = hält ewig)
+# form         = Form im Laderaum: 1x1, 2x1, 3x1, 2x2, L, T, 3x2
+# ============================================================
+
+# ---------------- Rohwaren ----------------
+[Holz]
+name = Holz
+modell = ware_holz
+beschreibung = Bretter und Stämme von der Waldinsel.
+kategorie = rohware
+basispreis = 14
+gewicht = 3
+form = 2x1
+
+[Naegel]
+name = Nägel
+modell = ware_naegel
+beschreibung = Eine Kiste geschmiedeter Nägel.
+kategorie = rohware
+basispreis = 9
+gewicht = 2
+form = 1x1
+
+[Werkzeug]
+name = Werkzeug
+modell = ware_werkzeug
+beschreibung = Sägen, Hobel und Schaufeln.
+kategorie = rohware
+basispreis = 22
+gewicht = 2
+form = 2x1
+
+[Bronzeplatten]
+name = Bronzeplatten
+modell = ware_bronzeplatten
+beschreibung = Gegossene Platten für feine Mechanik.
+kategorie = rohware
+basispreis = 26
+gewicht = 4
+form = 1x1
+
+[Papier]
+name = Papier
+modell = ware_papier
+beschreibung = Gebundene Bögen aus der Papiermühle.
+kategorie = rohware
+basispreis = 10
+gewicht = 1
+form = 1x1
+
+[Tinte]
+name = Tinte
+modell = ware_tinte
+beschreibung = Tiefblaue Tinte in Flaschen.
+kategorie = rohware
+basispreis = 15
+gewicht = 1
+form = 1x1
+
+# ---------------- Fertigwaren ----------------
+[Tische]
+name = Tische
+modell = ware_tische
+beschreibung = Massive Tische vom Tischler.
+kategorie = fertigware
+basispreis = 64
+gewicht = 4
+form = 2x2
+
+[Stuehle]
+name = Stühle
+modell = ware_stuehle
+beschreibung = Stabile Stühle für Tavernen.
+kategorie = fertigware
+basispreis = 34
+gewicht = 2
+form = L
+
+[Backsteine]
+name = Backsteine
+modell = ware_backsteine
+beschreibung = Gebrannte Ziegel für den Hausbau.
+kategorie = fertigware
+basispreis = 18
+gewicht = 5
+form = 2x1
+
+[Uhren]
+name = Uhren
+modell = ware_uhren
+beschreibung = Feine Taschenuhren - klein, leicht, wertvoll.
+kategorie = fertigware
+basispreis = 110
+gewicht = 1
+form = 1x1
+
+[Seekarten]
+name = Seekarten
+modell = ware_seekarten
+beschreibung = Handgezeichnete Karten der Inselwelt.
+kategorie = fertigware
+basispreis = 75
+gewicht = 1
+form = 1x1
+
+# ---------------- Gemüse ----------------
+[Karotten]
+name = Karotten
+modell = ware_karotten
+beschreibung = Frisch vom Feld.
+kategorie = gemuese
+basispreis = 7
+gewicht = 1
+verderblich = 3
+form = 1x1
+
+[Tomaten]
+name = Tomaten
+modell = ware_tomaten
+beschreibung = Reif und empfindlich.
+kategorie = gemuese
+basispreis = 9
+gewicht = 1
+verderblich = 2
+form = 1x1
+
+[Kohl]
+name = Kohl
+modell = ware_kohl
+beschreibung = Hält etwas länger.
+kategorie = gemuese
+basispreis = 7
+gewicht = 2
+verderblich = 5
+form = 1x1
+
+[Kuerbis]
+name = Kürbis
+modell = ware_kuerbis
+beschreibung = Groß und schwer.
+kategorie = gemuese
+basispreis = 12
+gewicht = 3
+verderblich = 6
+form = 2x2
+
+# ---------------- Obst ----------------
+[Aepfel]
+name = Äpfel
+modell = ware_aepfel
+beschreibung = Knackige Äpfel.
+kategorie = obst
+basispreis = 8
+gewicht = 1
+verderblich = 4
+form = 1x1
+
+[Bananen]
+name = Bananen
+modell = ware_bananen
+beschreibung = Werden schnell braun.
+kategorie = obst
+basispreis = 11
+gewicht = 1
+verderblich = 2
+form = 2x1
+
+[Trauben]
+name = Trauben
+modell = ware_trauben
+beschreibung = Süße Trauben - sehr empfindlich.
+kategorie = obst
+basispreis = 14
+gewicht = 1
+verderblich = 2
+form = 1x1
+
+[Kokosnuesse]
+name = Kokosnüsse
+modell = ware_kokosnuesse
+beschreibung = Halten fast ewig.
+kategorie = obst
+basispreis = 9
+gewicht = 2
+verderblich = 8
+form = 1x1
+
+# ---------------- Lebensmittel und Luxus ----------------
+[Fisch]
+name = Fisch
+modell = ware_fisch
+beschreibung = Fang des Tages - nur kurz frisch.
+kategorie = lebensmittel
+basispreis = 10
+gewicht = 1
+verderblich = 1
+form = 2x1
+
+[Rum]
+name = Rum
+modell = ware_rum
+beschreibung = Ein Fass besten Inselrums.
+kategorie = luxus
+basispreis = 38
+gewicht = 3
+form = 2x2

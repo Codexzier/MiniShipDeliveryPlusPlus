@@ -1,0 +1,157 @@
+# ============================================================
+# Die Seekarte
+#
+# [Welt]      Größe der Karte in Kacheln, Startwert für den Zufall, Startinsel
+# [Insel_*]   Eine Insel
+#   name        = Anzeigename
+#   typ         = stadt, dorf oder wild
+#   landschaft  = palmen, wald, stadt oder grusel (Bewuchs)
+#   x, y        = Mittelpunkt in Kacheln
+#   radius      = Größe der Insel in Kacheln
+#   hafen       = Richtung des einzigen Hafens: nord, ost, sued oder west
+#   gebaeude    = kontor, museum, werft, taverne, laden:<Händler>, hersteller:<Hersteller>
+#   markt       = Händler mit Marktstand auf dem Platz (höchstens drei)
+#   produziert  = Waren, die hier billig sind (Kontor verkauft günstig)
+#   bedarf      = Waren, die hier gesucht sind (Kontor zahlt mehr)
+# [Riff_*]    Flaches Wasser mit Felsen (Schiffe mit großem Tiefgang laufen auf)
+# [Piraten_*] Piratengebiet (staerke = wie viele Piratenschiffe gleichzeitig)
+# [Monster_*] Gebiet, in dem nachts Seeungeheuer jagen
+# [Route_*]   Sichere Handelsroute (Bojen; Piraten greifen dort selten an)
+#   von, nach  = Inseln
+#   ueber      = Zwischenpunkte "x y", durch Komma getrennt
+# ============================================================
+
+[Welt]
+breite = 150
+hoehe = 140
+seed = 1717
+start_insel = Insel_Ankerbucht
+
+[Insel_Ankerbucht]
+name = Ankerbucht
+typ = stadt
+landschaft = stadt
+x = 36
+y = 40
+radius = 12
+hafen = ost
+gebaeude = kontor, museum, werft, taverne, laden:Fertigwarenhaendler
+markt = Gemuesehaendler, Obsthaendler
+produziert = Naegel, Werkzeug, Backsteine, Fisch
+bedarf = Tische, Stuehle, Bananen, Trauben, Rum
+
+[Insel_Waldinsel]
+name = Waldinsel
+typ = dorf
+landschaft = wald
+x = 106
+y = 30
+radius = 11
+hafen = west
+gebaeude = kontor, hersteller:Tischler, taverne
+markt = Gemuesehaendler
+produziert = Holz, Kohl, Kuerbis
+bedarf = Werkzeug, Naegel, Fisch, Aepfel
+
+[Insel_Obstgarten]
+name = Obstgarten
+typ = dorf
+landschaft = palmen
+x = 112
+y = 100
+radius = 11
+hafen = nord
+gebaeude = kontor, werft, laden:Fertigwarenhaendler
+markt = Obsthaendler, Gemuesehaendler
+produziert = Bananen, Kokosnuesse, Trauben, Rum
+bedarf = Backsteine, Stuehle, Karotten, Seekarten
+
+[Insel_Papiermuehle]
+name = Papiermühle
+typ = stadt
+landschaft = stadt
+x = 38
+y = 104
+radius = 12
+hafen = nord
+gebaeude = kontor, museum, hersteller:Kartenhersteller, hersteller:Uhrmacher, taverne
+markt = Gemuesehaendler
+produziert = Papier, Tinte, Karotten, Tomaten, Aepfel
+bedarf = Holz, Bronzeplatten, Kokosnuesse, Uhren
+
+[Insel_Nebelinsel]
+name = Nebelinsel
+typ = wild
+landschaft = grusel
+x = 76
+y = 68
+radius = 8
+hafen = nord
+gebaeude = kontor
+produziert = Bronzeplatten
+bedarf = Rum, Kohl, Tomaten
+
+# ---------------- Gefahren auf See ----------------
+[Riff_Nord]
+x = 70
+y = 24
+radius = 6
+
+[Riff_Sued]
+x = 76
+y = 112
+radius = 6
+
+[Riff_West]
+x = 14
+y = 72
+radius = 5
+
+[Piraten_Ost]
+x = 136
+y = 64
+radius = 16
+staerke = 2
+
+[Piraten_Mitte]
+x = 62
+y = 74
+radius = 10
+staerke = 1
+
+[Monster_Tiefe]
+x = 88
+y = 128
+radius = 14
+staerke = 1
+
+[Monster_Nebel]
+x = 82
+y = 48
+radius = 8
+staerke = 1
+
+# ---------------- Sichere Handelsrouten ----------------
+[Route_Holzweg]
+name = Holzweg
+von = Insel_Ankerbucht
+nach = Insel_Waldinsel
+ueber = 62 38, 86 34
+
+[Route_Kuestenweg]
+name = Küstenweg
+von = Insel_Ankerbucht
+nach = Insel_Papiermuehle
+ueber = 56 56, 50 78
+
+[Route_Obstweg]
+name = Obstweg
+von = Insel_Papiermuehle
+nach = Insel_Obstgarten
+ueber = 56 88, 90 80
+
+[Route_Waldweg]
+name = Waldweg
+von = Insel_Waldinsel
+nach = Insel_Obstgarten
+ueber = 92 46, 116 76

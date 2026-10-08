@@ -49,9 +49,11 @@ public:                                                                         
     void textShadow(int x, int y, const std::string& t, Color c, int scale = 2);   // Text mit Schatten
     int textWrapped(int x, int y, int width, const std::string& t, Color c, int scale = 2); // Umbrochener Text, liefert Höhe
     void icon(const std::string& name, int cx, int cy, float angle = 0.0f);        // Symbol (zentriert, optional gedreht)
+    void iconScaled(const std::string& name, int cx, int cy, int size);            // Symbol zentriert auf eine Größe skaliert
     void image(const Image& img, int x, int y);                                    // Beliebiges Bild
     void tooltip(const std::vector<std::string>& lines);                           // Tooltip an der Maus (am Ende des Bildes gezeichnet)
     bool hovered(const RectI& r) const;                                            // Maus über einem Rechteck?
+    void addArea(const RectI& r) { m_panels.push_back(r); }                        // Bereich zur Oberfläche zählen (Klicks gehen nicht in die Welt)
     bool clickedIn(const RectI& r);                                                // Wurde in das Rechteck geklickt? (verbraucht den Klick)
     Canvas& canvas() { return *m_canvas; }                                         // Aktuelle Zeichenfläche
     UiInput& input() { return *m_input; }                                          // Aktuelle Eingaben

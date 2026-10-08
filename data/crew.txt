@@ -1,0 +1,80 @@
+# ============================================================
+# Crew-Rollen (Anheuern in der Taverne)
+#
+# name         = Anzeigename der Rolle
+# beschreibung = Kurztext
+# bonus        = attribut:prozent, ...  Verbesserung, solange die Person an Bord ist
+# malus        = attribut:prozent, ...  Verschlechterung - gilt NUR, wenn die Mindestbesatzung
+#                des Schiffs unterschritten ist (Spezialisten können dann nicht alles abdecken)
+# heuer        = Lohn pro Spieltag in Credits
+# figur        = Figur aus data/figuren.txt
+#
+# Attribute: geschwindigkeit, wendigkeit, reparatur, panzerung, abwehr, sichtweite,
+#            handel, verbrauch (negativ = sparsamer), motor (Maschinenleistung), verderb (negativ = länger frisch)
+#
+# Wichtig: Ohne Maschinisten läuft eine Maschine nur mit halber Kraft und doppeltem Verbrauch.
+# ============================================================
+
+[Matrose]
+name = Matrose
+beschreibung = Packt überall mit an. Zählt zur Mindestbesatzung.
+bonus = wendigkeit:5
+heuer = 8
+figur = matrose
+
+[Navigator]
+name = Navigator
+beschreibung = Liest Wind und Strömung. Schnellere Fahrt und bessere Wettervorhersage.
+bonus = geschwindigkeit:10, sichtweite:10
+malus = wendigkeit:10
+heuer = 18
+figur = matrose_b
+
+[Maschinist]
+name = Maschinist
+beschreibung = Hält die Maschine am Laufen. Ohne ihn läuft sie nur mit halber Kraft.
+bonus = motor:100, verbrauch:-30
+malus = geschwindigkeit:5
+heuer = 20
+figur = matrose_c
+
+[Kanonier]
+name = Kanonier
+beschreibung = Trifft auch bei hohem Seegang.
+bonus = abwehr:50
+malus = geschwindigkeit:5
+heuer = 16
+figur = matrose_d
+
+[Zimmermann]
+name = Schiffszimmermann
+beschreibung = Flickt Lecks schon auf hoher See.
+bonus = reparatur:120, panzerung:10
+malus = wendigkeit:5
+heuer = 15
+figur = matrose
+
+[Ausguck]
+name = Ausguck
+beschreibung = Scharfe Augen: sieht Artefakte, Piraten und Ungeheuer früher.
+bonus = sichtweite:45
+heuer = 10
+figur = matrose_b
+
+[Zahlmeister]
+name = Zahlmeister
+beschreibung = Feilscht um jede Münze.
+bonus = handel:8
+malus = geschwindigkeit:5
+heuer = 22
+figur = matrose_c
+
+[Smutje]
+name = Smutje
+beschreibung = Kocht ein und lagert richtig: verderbliche Ware hält länger.
+bonus = verderb:-40, reparatur:10
+heuer = 12
+figur = matrose_d
+
+[Namen]
+liste = Hein, Jule, Kalle, Mette, Ole, Frieda, Jasper, Wiebke, Tjark, Ilka, Momme, Antje, Fiete, Greta, Hauke, Lotte, Piet, Svea, Knut, Elke

@@ -1,0 +1,148 @@
+# ============================================================
+# Schiffsklassen (Kauf in der Werft)
+#
+# name             = Anzeigename
+# modell           = Modell aus data/modelle.txt
+# beschreibung     = Kurztext
+# preis            = Kaufpreis in Credits (das alte Schiff wird zur Hälfte angerechnet)
+# laderaum_breite  = Felder nebeneinander im Laderaum (Minispiel)
+# laderaum_hoehe   = Reihen im Laderaum
+# geschwindigkeit  = Höchstgeschwindigkeit in Kacheln pro Sekunde
+# reparatur        = Rumpfpunkte, die die Crew pro Spielstunde auf See flickt
+# panzerung        = Schadensminderung in Prozent
+# abwehr           = Kanonenschaden gegen Piraten und Ungeheuer
+# wendigkeit       = Drehgeschwindigkeit in Grad pro Sekunde
+# sichtweite       = Scanner / Ausguck in Kacheln (Artefakte, Gefahren)
+# handel           = Handelsfaktor in Prozent (100 = normal)
+# rumpf            = Rumpfpunkte (Gesundheit)
+# antrieb          = wind, motor oder hybrid (Segel + Maschine)
+# treibstoff_max   = Tankgröße in Einheiten (nur motor/hybrid)
+# verbrauch        = Treibstoff pro Sekunde bei voller Maschinenfahrt
+# tiefgang         = Tiefgang in Metern (flacheres Wasser = Grundberührung)
+# mindest_crew     = Mindestbesatzung (darunter gibt es Abzüge)
+# max_crew         = Kojen an Bord
+# ============================================================
+
+[Kutter]
+name = Kutter
+modell = schiff_kutter
+beschreibung = Kleines Segelboot mit einem Mast. Wendig, aber wenig Platz.
+preis = 0
+laderaum_breite = 4
+laderaum_hoehe = 3
+geschwindigkeit = 3.0
+reparatur = 2
+panzerung = 5
+abwehr = 0
+wendigkeit = 110
+sichtweite = 9
+handel = 100
+rumpf = 80
+antrieb = wind
+tiefgang = 1.2
+mindest_crew = 1
+max_crew = 2
+
+[Schaluppe]
+name = Schaluppe
+modell = schiff_schaluppe
+beschreibung = Zwei Masten, eine Kanone. Solide Wahl für den Handel.
+preis = 2400
+laderaum_breite = 5
+laderaum_hoehe = 4
+geschwindigkeit = 3.3
+reparatur = 3
+panzerung = 10
+abwehr = 8
+wendigkeit = 90
+sichtweite = 10
+handel = 100
+rumpf = 120
+antrieb = wind
+tiefgang = 1.8
+mindest_crew = 2
+max_crew = 4
+
+[Brigg]
+name = Brigg
+modell = schiff_brigg
+beschreibung = Drei Masten und Kanonen an beiden Seiten.
+preis = 6500
+laderaum_breite = 6
+laderaum_hoehe = 4
+geschwindigkeit = 3.6
+reparatur = 4
+panzerung = 18
+abwehr = 18
+wendigkeit = 70
+sichtweite = 11
+handel = 100
+rumpf = 180
+antrieb = wind
+tiefgang = 2.6
+mindest_crew = 3
+max_crew = 6
+
+[Dampfer]
+name = Dampfer
+modell = schiff_dampfer
+beschreibung = Dampfschiff: unabhängig vom Wind, braucht aber Kohle und einen Maschinisten.
+preis = 8000
+laderaum_breite = 7
+laderaum_hoehe = 4
+geschwindigkeit = 3.8
+reparatur = 3
+panzerung = 22
+abwehr = 6
+wendigkeit = 65
+sichtweite = 10
+handel = 100
+rumpf = 170
+antrieb = motor
+treibstoff_max = 160
+verbrauch = 0.6
+tiefgang = 2.4
+mindest_crew = 2
+max_crew = 5
+
+[Klipper]
+name = Klipper
+modell = schiff_klipper
+beschreibung = Schneller Hybrid aus Segeln und Hilfsmaschine. Entkommt fast allem.
+preis = 12500
+laderaum_breite = 6
+laderaum_hoehe = 4
+geschwindigkeit = 4.8
+reparatur = 4
+panzerung = 15
+abwehr = 12
+wendigkeit = 85
+sichtweite = 13
+handel = 100
+rumpf = 160
+antrieb = hybrid
+treibstoff_max = 100
+verbrauch = 0.45
+tiefgang = 2.2
+mindest_crew = 3
+max_crew = 6
+
+[Fregatte]
+name = Fregatte
+modell = schiff_fregatte
+beschreibung = Schwer bewaffnetes Lastschiff mit riesigem Laderaum.
+preis = 18000
+laderaum_breite = 8
+laderaum_hoehe = 5
+geschwindigkeit = 3.4
+reparatur = 6
+panzerung = 32
+abwehr = 30
+wendigkeit = 55
+sichtweite = 12
+handel = 100
+rumpf = 280
+antrieb = wind
+tiefgang = 3.2
+mindest_crew = 5
+max_crew = 9

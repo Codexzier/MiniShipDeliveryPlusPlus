@@ -67,10 +67,7 @@ bool ModelLibrary::load(const std::string& modelFile, const std::string& figureF
         }                                                                 // Ende der Teileschleife
         for (const std::string& key : file.keys(name)) {                  // Alle Eigenschaften des Modells
             if (key.rfind("farbe_", 0) != 0) continue;                    // Nur "farbe_<material>"
-            std::string material = key.substr(6);                         // Materialname
-            for (const std::string& orig : {std::string("roofLight"), std::string("woodDark"), std::string("_defaultMat")}) { // Gemischte Schreibweisen
-                if (PropertyFile::toLower(orig) == material) material = orig; // Originalschreibweise wiederherstellen
-            }                                                             // Ende der Schleife
+            std::string material = key.substr(6);                         // Materialname (klein geschrieben)
             d.recolor[material] = parseColor(file.getString(name, key, "255,255,255")); // Ersatzfarbe merken
         }                                                                 // Ende der Materialschleife
         m_defs[name] = d;                                                 // Speichern
@@ -256,7 +253,7 @@ bool ModelLibrary::buildMesh(const std::string& name, Mesh& out, int depth) { //
         base.append(part, Mat4::translation(pos) * eulerXYZ(rot) * Mat4::scale(Vec3(sc, sc, sc))); // Teil anhängen
     }                                                                     // Ende der Teileschleife
     for (Material& m : base.materials) {                                  // Farben anpassen
-        auto rc = d.recolor.find(m.name);                                 // Ersatzfarbe für dieses Material?
+        auto rc = d.recolor.find(PropertyFile::toLower(m.name));          // Ersatzfarbe für dieses Material? (Schreibweise egal)
         if (rc != d.recolor.end()) m.color = rc->second;                  // Ersetzen
         m.color = multiplyColor(m.color, d.tint);                         // Einfärben
     }                                                                     // Ende der Materialschleife

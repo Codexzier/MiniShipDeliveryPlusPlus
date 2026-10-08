@@ -1,0 +1,60 @@
+# ============================================================
+# Händlerarten (Marktstand auf dem Platz oder eigener Laden)
+#
+# name                = Anzeigename
+# art                 = Warenkategorie, mit der gehandelt wird: gemuese, obst, fertigware ...
+# kauft               = feste Liste der angekauften Waren (leer = Bedarf der Insel in dieser Kategorie,
+#                       sonst alle Waren der Kategorie, die die Insel nicht selbst herstellt)
+# verkauft            = feste Liste der verkauften Waren (leer = eigene Waren der Insel in dieser Kategorie)
+# figur               = Figur vor dem Stand
+# bedarf_max          = Höchstmenge, die je Ware angekauft wird
+# bedarf_modus        = taeglich (Bedarf jeden Morgen voll) oder steigend (wächst langsam)
+# bedarf_anstieg      = Zuwachs des Bedarfs je Spielstunde (nur steigend)
+# bestand_max         = Höchstbestand je verkaufter Ware
+# bestand_erholung    = Wiederauffüllung je Spielstunde
+# preisfaktor_ankauf  = Händler zahlt so viel mal den Inselpreis (mehr als das Kontor!)
+# preisfaktor_verkauf = Händler verlangt so viel mal den Inselpreis
+# frische_bonus       = Zuschlag für ganz frische verderbliche Ware (0.3 = +30 %)
+# lieferbonus         = Jede gelieferte Einheit füllt den Verkaufsbestand um so viel auf
+# ============================================================
+
+[Gemuesehaendler]
+name = Gemüsehändler
+art = gemuese
+figur = haendler
+bedarf_max = 10
+bedarf_modus = taeglich
+bestand_max = 8
+bestand_erholung = 0.6
+preisfaktor_ankauf = 1.45
+preisfaktor_verkauf = 0.95
+frische_bonus = 0.4
+lieferbonus = 0.3
+
+[Obsthaendler]
+name = Obsthändler
+art = obst
+figur = haendlerin
+bedarf_max = 8
+bedarf_modus = steigend
+bedarf_anstieg = 0.8
+bestand_max = 8
+bestand_erholung = 0.5
+preisfaktor_ankauf = 1.5
+preisfaktor_verkauf = 0.95
+frische_bonus = 0.45
+lieferbonus = 0.3
+
+[Fertigwarenhaendler]
+name = Fertigwarenhändler
+art = fertigware
+figur = haendler
+bedarf_max = 6
+bedarf_modus = steigend
+bedarf_anstieg = 0.4
+bestand_max = 4
+bestand_erholung = 0.25
+preisfaktor_ankauf = 1.35
+preisfaktor_verkauf = 1.0
+frische_bonus = 0
+lieferbonus = 0.2
