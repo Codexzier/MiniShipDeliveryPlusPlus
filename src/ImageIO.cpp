@@ -2,6 +2,7 @@
 #include "ImageIO.h" // Eigene Deklarationen
 
 #include <SDL.h>        // SDL_LoadBMP, SDL_SaveBMP und Oberflächen (Surfaces)
+#include <SDL_image.h>  // IMG_Load und IMG_SavePNG für PNG-Dateien
 #include <filesystem>   // std::filesystem für Ordner und Dateiprüfungen
 #include <system_error> // std::error_code, damit Dateifehler keine Ausnahmen werfen
 
@@ -77,5 +78,48 @@ bool saveBMP(const std::string& path, const Image& image) {        // Beginn von
     SDL_FreeSurface(rgb);                                          // Speicher freigeben
     return ok;                                                     // Ergebnis melden
 } // Ende von saveBMP
+
+// Lädt ein Bild beliebigen Formats (PNG, JPG, BMP) über SDL2_image und behält den Alphakanal
+bool loadImage(const std::string& path, Image& out) {              // Beginn von loadImage
+    if (!fileExists(path)) return false;                           // Datei fehlt -> nichts laden
+    SDL_Surface* loaded = IMG_Load(path.c_str());                  // Datei mit SDL2_image lesen
+    if (!loaded) return false;                                     // Lesen fehlgeschlagen
+    SDL_Surface* converted = SDL_ConvertSurfaceFormat(loaded, SDL_PIXELFORMAT_ARGB8888, 0); // In 32-Bit ARGB umwandeln
+    SDL_FreeSurface(loaded);                                       // Original freigeben
+    if (!converted) return false;                                  // Umwandlung fehlgeschlagen
+    out.resize(converted->w, converted->h);                        // Zielbild anlegen
+    SDL_LockSurface(converted);                                    // Pixelzugriff erlauben
+    for (int y = 0; y < converted->h; ++y) {                       // Alle Zeilen
+        const Uint32* row = reinterpret_cast<const Uint32*>(static_cast<const Uint8*>(converted->pixels) + y * converted->pitch); // Zeilenanfang
+        for (int x = 0; x < converted->w; ++x) out.set(x, y, row[x]); // Pixel übernehmen
+    }                                                              // Ende der Zeilenschleife
+    SDL_UnlockSurface(converted);                                  // Pixelzugriff beenden
+    SDL_FreeSurface(converted);                                    // Speicher freigeben
+    out.computeBounds();                                           // Sichtbaren Bereich bestimmen
+    return true;                                                   // Erfolgreich geladen
+} // Ende von loadImage
+
+// Speichert ein Bild als PNG-Datei (mit Alphakanal)
+bool savePNG(const std::string& path, const Image& image) {        // Beginn von savePNG
+    if (image.empty()) return false;                               // Leeres Bild kann nicht gespeichert werden
+    std::vector<Color> copy = image.pixels;                        // Kopie, weil SDL einen veränderbaren Zeiger erwartet
+    SDL_Surface* surface = SDL_CreateRGBSurfaceWithFormatFrom(copy.data(), image.width, image.height, 32, image.width * 4, SDL_PIXELFORMAT_ARGB8888); // Oberfläche um die Pixel legen
+    if (!surface) return false;                                    // Anlegen fehlgeschlagen
+    bool ok = IMG_SavePNG(surface, path.c_str()) == 0;             // PNG schreiben (0 bedeutet Erfolg)
+    SDL_FreeSurface(surface);                                      // Oberfläche freigeben
+    return ok;                                                     // Ergebnis melden
+} // Ende von savePNG
+
+// Liefert den Dateinamen ohne Ordner, z.B. "a/b/c.png" -> "c.png"
+std::string fileNameOf(const std::string& path) {                  // Beginn von fileNameOf
+    std::size_t slash = path.find_last_of("/\\");                 // Letzten Schrägstrich suchen
+    return slash == std::string::npos ? path : path.substr(slash + 1); // Teil dahinter zurückgeben
+} // Ende von fileNameOf
+
+// Liefert den Ordner einer Datei, z.B. "a/b/c.png" -> "a/b"
+std::string directoryOf(const std::string& path) {                 // Beginn von directoryOf
+    std::size_t slash = path.find_last_of("/\\");                 // Letzten Schrägstrich suchen
+    return slash == std::string::npos ? std::string(".") : path.substr(0, slash); // Teil davor zurückgeben
+} // Ende von directoryOf
 
 } // Ende des Namensraums ImageIO

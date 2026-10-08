@@ -1,0 +1,26 @@
+# Testversion
+[haus_test]
+typ = haus
+haus_groesse = 2
+stockwerke = 2
+wand = stein
+skalierung = 1.5
+farbe_roof = 190, 70, 55
+farbe_roofLight = 215, 90, 70
+
+[haus_holz]
+typ = haus
+haus_groesse = 1
+stockwerke = 1
+wand = holz
+skalierung = 1.5
+
+[boot]
+datei = Pirate Kit/Models/OBJ format/boat_large.obj
+skalierung = 0.12
+vorne = 270
+
+[brigg]
+datei = Pirate Kit/Models/OBJ format/ship_light.obj
+skalierung = 0.06
+vorne = 270
