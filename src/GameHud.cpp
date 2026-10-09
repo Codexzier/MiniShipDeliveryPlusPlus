@@ -268,7 +268,7 @@ void Game::renderScores() {                                                    /
     m_ui.panel(r, PanelStyle::WoodPaper);                                      // Hintergrund
     m_ui.text(r.x + 40, r.y + 30, "Score - die besten Kapitäne", UiColor::INK, 3); // Überschrift
     int y = r.y + 84;                                                          // Erste Zeile
-    const int cols[6] = {40, 110, 260, 360, 510, 610};                         // Spalten
+    const int cols[6] = {36, 110, 250, 340, 470, 610};                         // Spalten
     const char* heads[6] = {"Rang", "Punkte", "Tage", "Credits", "Entdecker", "Schiff"}; // Überschriften
     for (int i = 0; i < 6; ++i) m_ui.text(r.x + cols[i], y, heads[i], UiColor::INK_LIGHT, 2); // Kopfzeile
     y += 32;                                                                   // Nächste Zeile
@@ -281,7 +281,7 @@ void Game::renderScores() {                                                    /
         m_ui.text(r.x + cols[2], y, std::to_string(e.days), col, 2);           // Tage
         m_ui.text(r.x + cols[3], y, thousands(e.credits), col, 2);             // Geld
         m_ui.text(r.x + cols[4], y, std::to_string(e.explorer), col, 2);       // Entdeckerpunkte
-        m_ui.text(r.x + cols[5], y, fit(e.ship, 120, 2), col, 2);              // Schiff
+        m_ui.text(r.x + cols[5], y, fit(e.ship, 110, 2), col, 2);              // Schiff
         y += 34;                                                               // Nächste Zeile
     }                                                                          // Ende der Einträge
     m_ui.text(r.x + 40, r.y + r.h - 62, "Punkte = Credits + Schiffswert + Ladung + 10 x Entdeckerpunkte", UiColor::INK_LIGHT, 1); // Erklärung

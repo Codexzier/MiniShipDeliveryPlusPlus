@@ -1,178 +1,134 @@
 # Mini Ship Delivery
 
-Ein Pixelart-Sidescroller in C++17. Ein Paketbote läuft durch eine kurze Teststrecke,
-kauft im Shop einen Enterhaken, wartet an der Fußgängerampel auf Grün und schwingt
-mit dem Enterhaken über einen Wassergraben, in dem Müll schwimmt.
+Ein isometrisches Handels- und Seefahrtspiel in C++17 (Ansicht ähnlich wie bei Diablo).
+Als Kapitän läufst du zu Fuß über Inseln und segelst mit deinem Schiff zwischen ihnen hin und her:
+Waren günstig einkaufen, das Schiff im Minispiel geschickt beladen, gegen Wind, Wetter, Piraten und
+nächtliche Seeungeheuer bestehen und die Ware mit Gewinn verkaufen. Mit dem Geld kaufst du Verbesserungen,
+größere Schiffe und heuerst Crew an. Treibgut (Artefakte) bringt im Museum Geld und Entdeckerpunkte.
 
-Das Spiel rendert komplett in Software (CPU), ein Grafikbeschleuniger wird nicht benötigt.
-SDL2 wird nur für Fenster, Tastatur/Maus und das Kopieren des fertigen Bildes ins Fenster benutzt
-(mit dem Software-Renderer von SDL). Jede Zeile des Quellcodes ist auf Deutsch kommentiert.
+Alles wird von der CPU gezeichnet, ein Grafikbeschleuniger wird nicht benötigt: Die 3D-Modelle aus den
+Kenney-Paketen (OBJ und animierte FBX-Figuren) werden mit einem eigenen Software-Rasterizer einmal in
+isometrische Sprites gerendert und zwischengespeichert. SDL2 dient nur für Fenster, Eingaben, Bilder laden,
+Ton und das Kopieren des fertigen Bildes ins Fenster (Software-Renderer von SDL).
+Jede Codezeile ist auf Deutsch kommentiert. Alle Spielwerte stehen in Textdateien im Ordner `data/`.
 
 ## Voraussetzungen
 
-- C++17-Compiler (GCC oder Clang)
-- CMake ab Version 3.16
-- SDL2-Entwicklungspaket
+- C++17-Compiler (GCC oder Clang), CMake ab 3.16
+- SDL2, SDL2_image, zlib (Pflicht), SDL2_mixer (optional, ohne bleibt das Spiel stumm)
 
 | System | Installation |
 |---|---|
-| Ubuntu, Debian, Raspberry Pi OS | `sudo apt install build-essential cmake libsdl2-dev` |
-| Fedora | `sudo dnf install gcc-c++ cmake SDL2-devel` |
-| Arch Linux | `sudo pacman -S base-devel cmake sdl2` |
+| Ubuntu, Debian, Raspberry Pi OS | `sudo apt install build-essential cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev zlib1g-dev` |
+| Fedora | `sudo dnf install gcc-c++ cmake SDL2-devel SDL2_image-devel SDL2_mixer-devel zlib-devel` |
+| Arch Linux | `sudo pacman -S base-devel cmake sdl2 sdl2_image sdl2_mixer zlib` |
 
 Läuft auf PCs (x86/x64) und auf ARM-Systemen wie dem Raspberry Pi 4 oder neuer.
 
 ## Bauen und Starten
 
-### CLion
+**CLion:** *File → Open*, den Projektordner wählen, Konfiguration `MiniShipDelivery` starten.
 
-1. *File → Open* und den Projektordner (mit `CMakeLists.txt`) öffnen.
-2. Oben rechts die Konfiguration `MiniShipDelivery` wählen und auf *Run* klicken.
-
-Das Programm findet den Ordner `data/` automatisch (neben der Programmdatei, eine oder zwei
-Ebenen darüber, im Arbeitsverzeichnis oder im Projektordner). Änderungen an den Textdateien
-in `data/` wirken beim nächsten Start, ohne neu zu kompilieren.
-
-### Terminal
+**Konsole:**
 
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build
+cmake --build build -j4
 ./build/MiniShipDelivery
 ```
 
-### Raspberry Pi
-
-Funktioniert genauso. Für flüssiges Spielen auf dem Pi in `data/spiel.txt` eine kleinere
-Spritegröße einstellen, z.B. `kachel_groesse = 64` (ein Viertel der Pixel) oder `32`.
-Bei 1280×720 und Kachelgröße 128 braucht das Spiel auf einem PC ungefähr 30 % eines CPU-Kerns,
-bei 64 etwa 15 % und bei 32 etwa 8 %.
+Das Programm sucht `data/` und `assets/` neben der ausführbaren Datei, eine Ebene darüber, im aktuellen Ordner
+und zuletzt im Quellordner. Spielstand und Punkteliste landen in `speicher/`.
 
 ## Steuerung
 
-| Taste | Aktion |
-|---|---|
-| A / D | nach links / nach rechts laufen |
-| Leertaste | springen (am Seil: loslassen) |
-| E | interagieren (Shop betreten, Ampel-Taster drücken, Shop schließen) |
-| Q | Enterhaken werfen (am Seil: loslassen) |
-| A / D am Seil | Schwung holen |
-| 1 bis 8 | Gegenstand im Inventarfeld benutzen (oder anklicken) |
-| Esc | Frage „Spiel beenden?“ öffnen |
-| F12 | Bildschirmfoto nach `screenshots/` speichern |
+| Taste | Zu Fuß | Auf dem Schiff |
+|---|---|---|
+| W A S D | laufen | W/S: Fahrstufe (Segel bzw. Maschine, ganz unten rückwärts), A/D: Ruder |
+| Linksklick | hinlaufen; Gebäude, Händler oder Schiff anklicken = hingehen und betreten | Kurs setzen (Autopilot fährt um Inseln herum) |
+| E | Tür öffnen / am Stegende zum Schiff | Anlegen (nur am Hafensteg) |
+| T | – | Autopilot zum gesetzten Ziel an/aus |
+| Leertaste | – | Kanonen auf das nächste Ziel |
+| F | – | Hilfsmaschine an/aus (Hybrid-Schiff) |
+| M / I / Z | Seekarte / Schiff & Crew / Hafenzeitung | ebenso |
+| Mausrad, + / - | Zoom | Zoom |
+| F1, Esc, F3 | Hilfe, Pausemenü, Bildzeit anzeigen | ebenso |
 
-Mit der Maus lassen sich alle Knöpfe bedienen. Wenn du mit der Maus über Gegenstände im Shop
-oder im Inventar fährst, erscheint ein Tooltip mit Name, Beschreibung und Preis.
+Im Minispiel „Schiff beladen“: Linksklick nimmt eine Ware vom Steg bzw. legt sie ab, R oder Rechtsklick dreht,
+Esc kehrt zum Steg zurück. Alle Tasten lassen sich in `data/spiel.txt` (Abschnitt `[Steuerung]`) ändern.
 
-Die Tasten lassen sich in `data/spiel.txt` im Abschnitt `[Steuerung]` ändern.
+## Spielablauf
 
-## Ablauf der Teststrecke
+- **Inseln und Häfen:** Jede Insel hat genau einen Hafensteg. Nur dort legt das Schiff an, und nur über den Steg
+  geht der Kapitän an Land oder an Bord.
+- **Kontor:** kauft alles, verkauft unbegrenzt die Waren, die auf der Insel entstehen. Eigene Waren sind billig,
+  gesuchte teuer; viele Verkäufe drücken den Preis (erholt sich täglich). Hier gibt es auch Lieferaufträge mit Frist
+  (der nächste Termin steht oben links im HUD) und Kohle.
+- **Händler** (Marktstand oder Laden; Gemüse, Obst, Fertigwaren): kaufen und verkaufen nur begrenzte Mengen, zahlen
+  aber mehr als das Kontor. Bedarf: täglich voll oder langsam steigend. Frische verderbliche Ware bringt einen Zuschlag,
+  jede Lieferung füllt das Angebot des Händlers auf. Der Bestand erholt sich mit der Zeit.
+- **Hersteller** (Tischler, Uhrmacher, Kartenzeichner): kaufen nur Rohwaren (mehr als das Kontor, begrenzt durch
+  das Lager) und verkaufen nur ihre Produkte; wie viel sie herstellen, hängt von den gelieferten Rohwaren ab.
+- **Steg und Laderaum:** Gekaufte Ware liegt am Steg. Im Minispiel wird sie in den Laderaum gepackt – Formen und
+  Gewichte unterscheiden sich. Zu viel Gewicht auf einer Seite gibt Schlagseite; wird die Grenze überschritten,
+  kentert das Schiff beim Ablegen und die Ladung geht über Bord. Hafenarbeiter packen gegen Gebühr automatisch.
+- **Schiff:** Frachtgröße, Geschwindigkeit, Reparatur, Panzerung, Abwehr, Wendigkeit, Sichtweite (Scanner),
+  Handel (100 %), Rumpf, Tiefgang. Antrieb Wind, Dampf (Kohle, Maschinist nötig) oder Hybrid. Klassen: Kutter,
+  Schaluppe, Brigg, Dampfer, Klipper, Fregatte. Verbesserungen und neue Schiffe gibt es in der Werft.
+- **Crew** (Taverne): Matrose, Navigator, Maschinist, Kanonier, Schiffszimmermann, Ausguck, Zahlmeister, Smutje.
+  Jede Rolle gibt Boni; Nachteile gibt es nur, wenn die Mindestbesatzung unterschritten ist. Heuer täglich um 6 Uhr.
+- **Wetter und Zeit:** Windrichtung und -stärke wechseln; Segler sind vor dem Wind schnell und kommen gegen den Wind
+  kaum voran, im Sturm schaden volle Segel. Regen und Nebel (weniger Sicht), Tag und Nacht. Die Hafenzeitung (Z)
+  hat eine Vorhersage (mit Navigator genauer). Geschäfte haben Öffnungszeiten, die Taverne bietet Übernachtung.
+- **Gefahren:** Riffe und flaches Wasser (Tiefgang!), Piraten abseits der Bojen-Routen (Kanonenfeuer, Entern mit
+  Ladungsraub, Untergang), nachts Seeungeheuer in bestimmten Gewässern – nur schnelle Schiffe entkommen.
+  Ein gesunkenes Schiff wird im letzten Hafen durch einen Kutter ersetzt, Ladung und Artefakte sind verloren.
+- **Artefakte:** treiben auf See und erscheinen im Scanner. Verkauf im Museum gegen Credits und Entdeckerpunkte;
+  mehr Punkte schalten wertvollere Artefakte frei (seltene treiben oft in gefährlichen Gewässern).
+- **Punkte:** Credits + Schiffswert + Ladung + 10 × Entdeckerpunkte (Score-Liste im Hauptmenü).
 
-1. **Start:** zwei Münzen, danach ein schmaler, trockener **Graben** zum Drüberspringen.
-2. **Shop („Krämerladen“):** vor der Tür `E` drücken. Die Karte wechselt nicht, es öffnet sich das
-   Shop-Menü mit 4×4 Feldern: Einkaufsbeutel, Enterhaken und Dose Energy. Beim Schließen wird
-   automatisch gespeichert.
-3. **Straße mit Fußgängerampel:** Bei Rot fahren Autos über die Furt (sie kommen aus der Tiefe
-   auf den Betrachter zu). Wer bei Rot losläuft, wird angefahren und verliert Leben. Mit `E` am
-   Ampelmast drückst du den Taster und es wird schneller grün.
-4. **Wassergraben mit Müll:** zu breit zum Springen. Mit gekauftem Enterhaken an den Ankerring
-   am Stahlgestell werfen (`Q`), Schwung holen (`A`/`D`) und mit `Leertaste` loslassen.
-5. Ein paar Schritte weiter wartet das **Ziel**. Dann erscheint die Meldung, dass das Level-Ende
-   erreicht wurde, und die Frage, ob du von vorne beginnen möchtest.
+## HUD
 
-Fällt die Figur in einen Graben, verliert sie Leben und erscheint am Grabenrand wieder.
-Bei 0 Leben fragt das Spiel, ob du neu beginnen möchtest.
+| Ecke | Mit dem Schiff | Als Figur |
+|---|---|---|
+| oben links | Uhrzeit, Tag/Nacht, Wetter, nächster Termin | ebenso |
+| oben rechts | Rumpf, Credits | Gesundheit des Kapitäns, Credits |
+| unten links | Windstärke und -richtung, Wassertiefe, Fahrstufe | Dialogfenster |
+| unten rechts | Richtungspfeil zum gesetzten Ziel | ebenso |
 
-## Bildschirmaufbau
-
-- **Hauptmenü:** Titel „Mini Ship Delivery“ in der oberen Hälfte, darunter die Knöpfe
-  *Neues Spiel*, *Letzter Spielstand* und *Beenden*.
-- **Menüleiste oben** über die ganze Breite: ganz links der Beenden-Knopf (mit Sicherheitsabfrage),
-  links die Ausdauer, in der Mitte die Lebensleiste, rechts die Coins, ganz rechts die Uhrzeit.
-- **Inventar unten links:** 4 Felder nebeneinander, 2 Reihen.
-- **Hintergrund:** vier Parallax-Ebenen (Wolken, Berge, Stadt, Häuser), die sich langsamer als
-  der Vordergrund bewegen und so Tiefe erzeugen.
-
-## Eigenschaften in Textdateien
-
-Alle Eigenschaften von Objekten, Gegenständen und der Spielfigur stehen in Textdateien im Ordner
-`data/`. In eckigen Klammern steht der Name des Objekts, darunter folgen Eigenschaft und Wert:
-
-```ini
-[Spieler]
-lauf_geschwindigkeit = 3.2
-sprung_geschwindigkeit = 8.6
-```
+## Dateien in `data/`
 
 | Datei | Inhalt |
 |---|---|
-| `data/spiel.txt` | Fenster, Spritegröße (128/64/32), sichtbare Breite, Steuerung, erste Karte |
-| `data/spieler.txt` | Spielfigur (Laufen, Springen, Leben, Ausdauer, Coins) und Physik des Enterhakens |
-| `data/animationen.txt` | Zeile, Bildanzahl und Geschwindigkeit jeder Animation im Sprite-Sheet |
-| `data/gegenstaende.txt` | Gegenstände mit Name, Beschreibung, Preis, Symbol und Wirkung |
-| `data/level1.txt` | Karte: Gräben, Shop, Ampel, Ankerpunkt, Münzen, Ziel |
+| `spiel.txt` | Fenster, Grafik (Kachelgröße, Zoom, Kantenglättung), Zeit, Startwerte, Steuerung, Preise, Gefahren, Wetter, Minispiel |
+| `welt.txt` | Karte: Inseln (Lage, Größe, Hafenrichtung, Gebäude, Markt, eigene und gesuchte Waren), Riffe, Piraten- und Monstergebiete, Handelsrouten |
+| `waren.txt` | Waren mit Kategorie, Grundpreis, Gewicht, Haltbarkeit und Form im Laderaum |
+| `schiffe.txt` | Schiffsklassen mit allen Attributen |
+| `crew.txt` | Crew-Rollen mit Boni, Nachteilen und Heuer, Namen für Bewerber |
+| `upgrades.txt` | Werft-Verbesserungen |
+| `artefakte.txt` | Artefakte und Entdecker-Schwellen |
+| `haendler.txt` / `hersteller.txt` | Händlerarten bzw. Hersteller mit Rezepten |
+| `modelle.txt` / `figuren.txt` | 3D-Modelle (OBJ, Skalierung, Farben, zusammengesetzte Modelle, Hausgenerator) und animierte Figuren (FBX) |
+| `audio.txt` | Pfade zu Musik und Geräuschen (fehlende Dateien werden durch synthetische Platzhalter ersetzt) |
 
-Zeilen mit `#` sind Kommentare, Kommazahlen dürfen Punkt oder Komma enthalten. In der Karte
-werden Objekte am Anfang ihres Namens erkannt (`Graben…`, `Shop…`, `Ampel…`, `Anker…`, `Muenze…`).
-Neue Objekte lassen sich einfach ergänzen, z.B. `[Graben_3]` oder `[Muenze_9]`.
+## Leistung
 
-Der Spielstand wird im gleichen Format in `speicher/spielstand.txt` geschrieben.
+Auf einem aktuellen x86-PC braucht ein Bild bei 1280 × 720 rund 10–15 ms (F3 zeigt den Wert).
+Für schwächere Rechner wie den Raspberry Pi in `data/spiel.txt` z. B. `kachel_groesse = 64`,
+`zoomstufen = 48, 64`, `kantenglaettung = 1` und ein kleineres Fenster einstellen.
 
-## Eigene Sprites statt Platzhalter
-
-Da noch keine Grafiken vorliegen, zeichnet das Spiel beim Start Platzhalter per Programmcode.
-Die Spielfigur wird dabei aus Gelenkwinkeln zusammengesetzt, damit die Bewegungsabläufe
-erkennbar sind. Auch Shop, Ampel, Autos, Müll, Münzen, Zielflagge und Hintergründe sind Platzhalter.
-
-- Beim Start werden alle Platzhalter als BMP-Vorlagen nach `assets_dummies/<Größe>/` exportiert
-  (abschaltbar mit `dummies_exportieren = 0`).
-- Eine Vorlage bearbeiten oder neu zeichnen und unter gleichem Namen nach `assets/<Größe>/` legen,
-  z.B. `assets/128/spieler.bmp`. Eigene Dateien haben immer Vorrang vor den Platzhaltern.
-- Magenta (R 255, G 0, B 255) gilt als durchsichtig. 32-Bit-BMPs mit Alphakanal gehen ebenfalls.
-- Hat ein eigenes Bild eine andere Größe, wird es passend skaliert (mit Hinweis in der Konsole).
-
-Sprite-Sheet der Spielfigur (`spieler.bmp`, Standard 1280×1280 Pixel bei 128er Sprites):
-
-| Zeile | Animation | Bilder |
-|---|---|---|
-| 0 | Laufen nach rechts | 10 |
-| 1 | Laufen nach links | 10 |
-| 2 | Springen (2 aufwärts, 2 abwärts) | 4 |
-| 3 | Landen | 4 |
-| 4 | Enterhaken werfen | 4 |
-| 5 | Hochschwingen | 4 |
-| 6 | Aufschwung | 2 |
-| 7 | Abschwung | 2 |
-| 8 | Landen nach dem Enterhaken | 4 |
-| 9 | Stehen (zusätzlich) | 2 |
-
-Zeilen und Bildanzahlen lassen sich in `data/animationen.txt` ändern.
-
-## Quellcode
+## Quellcode (`src/`)
 
 | Datei | Aufgabe |
 |---|---|
-| `src/main.cpp` | Einstiegspunkt |
-| `src/Game.*` | Spielschleife, Hauptmenü, Popups, Spiellogik, Speichern |
-| `src/Graphics.*` | Bildspeicher und Zeichenfunktionen (Software-Rendering) |
-| `src/Font.*` | Eingebaute Pixelschrift mit Umlauten |
-| `src/PropertyFile.*` | Lesen/Schreiben der Eigenschafts-Textdateien |
-| `src/ImageIO.*`, `src/Assets.*` | BMP-Dateien und Bildverwaltung |
-| `src/SpriteFactory.*` | Platzhalter-Grafiken |
-| `src/Animation.*` | Animationen der Figur |
-| `src/Player.*` | Spielfigur: Bewegung, Kollision, Enterhaken-Pendel |
-| `src/Level.*` | Karte mit Gräben, Shop, Ampel und Autos, Ankern, Münzen, Ziel |
-| `src/Background.*` | Parallax-Hintergrund |
-| `src/Hud.*`, `src/Shop.*`, `src/Ui.*` | Menüleiste, Inventar, Shop-Menü, Knöpfe, Popups, Tooltips |
-| `src/Items.*` | Gegenstände und Inventar |
-| `src/Effects.*` | Wasserspritzer, Funkeln, schwebende Texte |
-| `src/SaveGame.*` | Spielstand |
+| `main.cpp`, `Game.*` | Start, Hauptschleife, Eingaben, Menüablauf, Speichern, Punkteliste |
+| `GameUpdate.cpp` | Figur, Schiffsphysik (Wind, Segel, Maschine, Tiefgang), Anlegen, Autopilot, Piraten, Seeungeheuer, Kanonen |
+| `GameRender.cpp`, `GameHud.cpp`, `LoadShip.cpp` | Weltdarstellung mit Licht und Wetter, HUD und Fenster, Minispiel |
+| `GameState.*`, `GameData.*` | Spiellogik (Zeit, Wetter, Wirtschaft, Crew, Laderaum, Aufträge, Artefakte, Spielstand) und feste Daten |
+| `World.*` | Inselgenerator, Häfen, Gebäude, Bewuchs, Wegsuche zu Fuß und auf See |
+| `Rasterizer.*`, `Mesh.*`, `FbxLoader.*`, `Math3D.h`, `ModelLibrary.*` | Software-3D: OBJ/MTL, FBX mit Skelettanimation, isometrisches Rendern, Sprite-Zwischenspeicher |
+| `Graphics.*`, `Font.*`, `Ui.*`, `ImageIO.*`, `Audio.*`, `PropertyFile.*` | Zeichnen, Pixelschrift, Oberfläche (Interface Pack), Bilder, Ton, Textdateien |
 
-## Hinweise
+## Lizenzen der Grafiken
 
-- „Einkaufbau“ aus der Spezifikation wurde als **Einkaufsbeutel** umgesetzt (erhöht die maximale
-  Ausdauer um 25). Name, Beschreibung und Wirkung lassen sich in `data/gegenstaende.txt` ändern.
-- „Beenden“ in der Menüleiste speichert den Spielstand und kehrt ins Hauptmenü zurück.
-  Dort beendet „Beenden“ das Programm.
-- Die Ausdauer wird beim Springen und beim Enterhaken verbraucht und erholt sich am Boden.
-  Die Dose Energy füllt sie sofort auf.
+Alle 3D-Modelle, Figuren und Oberflächengrafiken in `assets/` stammen von Kenney (www.kenney.nl, CC0).
