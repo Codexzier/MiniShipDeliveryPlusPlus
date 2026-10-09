@@ -159,8 +159,8 @@ beute = 120, 320
 
 [Monster]
 geschwindigkeit = 3.9
-schaden = 22
-biss_pause = 2
+schaden = 16
+biss_pause = 2.5
 lebenspunkte = 220
 sichtweite = 9
 

@@ -119,6 +119,7 @@ void Game::run() {                                                           // 
         render();                                                            // Bild zeichnen
         present();                                                           // Anzeigen
         Uint32 used = SDL_GetTicks() - frameStart;                           // Benötigte Zeit
+        m_frameMs = m_frameMs * 0.95f + static_cast<float>(used) * 0.05f;    // Geglättete Bildzeit (für die Anzeige mit F3)
         Uint32 target = 1000u / static_cast<Uint32>(m_maxFps);               // Zeit je Bild
         if (used < target) SDL_Delay(target - used);                         // Rest abwarten (schont die CPU)
     }                                                                        // Ende der Schleife
@@ -159,6 +160,7 @@ void Game::handleEvent(const SDL_Event& e) {                                 // 
 // Wertet einen Tastendruck aus
 void Game::handleKey(SDL_Scancode sc) {                                      // Beginn von handleKey
     if (m_screen == Screen::Scores) { if (sc == keyOf("pause")) m_screen = Screen::Menu; return; } // Punkteliste schließen
+    if (sc == SDL_SCANCODE_F3) { m_showFps = !m_showFps; return; }           // Bildrate ein-/ausblenden
     if (m_screen == Screen::Menu) return;                                    // Im Menü nur Maus
     if (m_screen == Screen::LoadShip) {                                      // Minispiel
         if (sc == keyOf("drehen")) m_lsRot = (m_lsRot + 1) % 4;              // Gehaltene Einheit drehen
@@ -248,6 +250,11 @@ void Game::render() {                                                        // 
     } else if (m_screen == Screen::LoadShip) {                               // Minispiel
         renderLoadShip();                                                    // Minispiel zeichnen
     }                                                                        // Ende der Bildschirme
+    if (m_showFps) {                                                         // Bildrate anzeigen
+        std::string t = std::to_string(static_cast<int>(m_frameMs + 0.5f)) + " ms/Bild, " + std::to_string(m_lib.renderedCount()) + " Sprites"; // Text
+        c.fillRect(m_w / 2 - 140, 140, 280, 24, rgba(0, 0, 0, 150));         // Hintergrund
+        Font::drawText(c, m_w / 2 - Font::textWidth(t, 2) / 2, 144, t, rgba(120, 255, 120), 2); // Text
+    }                                                                        // Ende Bildrate
     m_ui.endFrame();                                                         // Tooltip zeichnen
 } // Ende von render
 

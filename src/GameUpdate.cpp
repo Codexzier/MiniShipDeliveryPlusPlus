@@ -600,6 +600,7 @@ void Game::shipSunk(const std::string& cause) {                              // 
     m_state.docked = isl; m_state.onFoot = true;                             // Im Hafen
     m_state.shipX = h.dockX; m_state.shipY = h.dockY; m_state.shipAngle = h.dockAngle; // Neues Schiff am Steg
     m_state.figX = h.pierEndX; m_state.figY = h.pierEndY;                    // Kapitän am Steg
+    m_cam.x = m_state.figX; m_cam.y = m_state.figY;                          // Kamera springt in den Hafen
     m_state.health = std::max(10.0f, m_state.health - 30.0f);                // Der Kapitän ist erschöpft
     m_sunkText = "Dein Schiff (" + oldName + ") ist durch " + cause + " gesunken. " + std::to_string(lostCargo) + " Ladungseinheiten und " + std::to_string(lostArtifacts) + " Artefakte sind verloren. Fischer haben dich nach " + h.name + " gebracht. Die Hafenversicherung stellt dir einen einfachen Kutter."; // Text
     resetTransient();                                                        // Gegner und Effekte weg

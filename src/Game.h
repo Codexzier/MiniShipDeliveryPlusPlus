@@ -205,6 +205,8 @@ private:                                                                        
     Image m_frame;                                     // Bildspeicher (wird per CPU gefüllt)
     int m_w = 1280, m_h = 720;                         // Bildgröße
     int m_maxFps = 60;                                 // Bildrate
+    float m_frameMs = 0.0f;                            // Geglättete Rechenzeit je Bild
+    bool m_showFps = false;                            // Bildrate anzeigen (F3)
     bool m_running = true;                             // Läuft das Spiel?
     std::string m_root;                                // Projektordner (data/, assets/, speicher/)
     PropertyFile m_config;                             // data/spiel.txt

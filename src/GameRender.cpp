@@ -158,18 +158,18 @@ void Game::renderLighting(Canvas& c) {                                      // B
             int sx = static_cast<int>(m_cam.toScreenX(o.x, o.y)), sy = static_cast<int>(m_cam.toScreenY(o.x, o.y, o.z + 1.0f)); // Lampenkopf
             if (sx < -100 || sy < -100 || sx > m_w + 100 || sy > m_h + 100) continue; // Unsichtbar
             int gy = static_cast<int>(m_cam.toScreenY(o.x, o.y, o.z));      // Boden unter der Laterne
-            softGlow(c, sx, gy, static_cast<int>(tw * 1.1f), 255, 200, 120, glow * 2); // Lichtkreis am Boden
-            softGlow(c, sx, sy, static_cast<int>(tw * 0.3f), 255, 230, 150, glow * 3); // Heller Kern an der Lampe
+            softGlow(c, sx, gy, static_cast<int>(tw * 1.1f), 255, 200, 120, glow);     // Lichtkreis am Boden
+            softGlow(c, sx, sy, static_cast<int>(tw * 0.3f), 255, 230, 150, glow * 2); // Heller Kern an der Lampe
         }                                                                   // Ende Laternen
         for (const Building& b : m_world.buildings) {                       // Erleuchtete Fenster
             if (b.type == "haendler") continue;                             // Marktstände haben keine Fenster
             int sx = static_cast<int>(m_cam.toScreenX(b.x, b.y)), sy = static_cast<int>(m_cam.toScreenY(b.x, b.y, 0.9f)); // Hausmitte
             if (sx < -200 || sy < -200 || sx > m_w + 200 || sy > m_h + 200) continue; // Unsichtbar
-            softGlow(c, sx, sy, static_cast<int>(tw * 1.0f), 255, 190, 100, glow);     // Warmer Schein aus den Fenstern
+            softGlow(c, sx, sy, static_cast<int>(tw * 1.0f), 255, 190, 100, glow / 2); // Warmer Schein aus den Fenstern
         }                                                                   // Ende Fenster
         if (m_screen == Screen::Playing) {                                  // Schiffslaterne
             int sx = static_cast<int>(m_cam.toScreenX(m_state.shipX, m_state.shipY)), sy = static_cast<int>(m_cam.toScreenY(m_state.shipX, m_state.shipY, 0.8f)); // Position
-            softGlow(c, sx, sy, static_cast<int>(m_cam.tileWidth * 0.7f), 255, 210, 130, glow * 2); // Lichtschein der Schiffslaterne
+            softGlow(c, sx, sy, static_cast<int>(m_cam.tileWidth * 0.9f), 255, 210, 130, glow * 3 / 4); // Lichtschein der Schiffslaterne
             for (const Monster& m : m_monsters) {                           // Leuchtende Augen der Ungeheuer
                 int mx = static_cast<int>(m_cam.toScreenX(m.x, m.y)), my = static_cast<int>(m_cam.toScreenY(m.x, m.y, m.emerge * 1.2f)); // Kopf
                 c.fillCircle(mx, my, 4, rgba(255, 60, 40, static_cast<int>(200.0f * m.emerge))); // Rotes Glühen

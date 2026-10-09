@@ -43,4 +43,4 @@ struct RenderParams {                         // Beginn der Struktur
 }; // Ende der Struktur RenderParams
 
 // Rendert ein Modell. positions ersetzt optional die Eckpunkte (z.B. animierte Figur), transform wirkt im Modellraum.
-Sprite renderMesh(const Mesh& mesh, const std::vector<Vec3>* positions, const Mat4& transform, const RenderParams& params);
+Sprite renderMesh(const Mesh& mesh, const std::vector<Vec3>* positions, const Mat4& transform, const RenderParams& params); // Ergebnis: Bild mit Ankerpunkt
